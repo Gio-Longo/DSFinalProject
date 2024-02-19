@@ -27,21 +27,20 @@ def pull_13f(wrds_username=WRDS_USERNAME):
 
     return df_13f
 
-def pull_mutual_fund(wrds_username=WRDS_USERNAME):
+def pull_mf_mapping(wrds_username=WRDS_USERNAME):
     sql_query = """
-        SELECT 
-            a.fdate, a.fundno, a.fundname
+        SELECT a.fdate, a.mgrcoab, a.mgrco
         FROM 
-            tr_mutualfunds.s12 AS a
+            tr_mutualfunds.s12type7 AS a
         WHERE 
             a.fdate BETWEEN '03/31/1980' AND '12/31/2017'
         """
 
     db = wrds.Connection(wrds_username=wrds_username)
-    df_13f = db.raw_sql(sql_query, date_cols=["fdate"])
+    df_mf = db.raw_sql(sql_query, date_cols=["fdate"])
     db.close()
 
-    return df_13f
+    return df_mf
 
 def load_13f(data_dir=DATA_DIR):
     path = Path(data_dir) / "pulled" / "13f.parquet"
@@ -62,5 +61,5 @@ if __name__ == "__main__":
     comp = pull_13f(wrds_username=WRDS_USERNAME)
     comp.to_parquet(DATA_DIR / "pulled" / "13f.parquet")
 
-    crsp = pull_mutual_fund(wrds_username=WRDS_USERNAME)
+    crsp = pull_mf_mapping(wrds_username=WRDS_USERNAME)
     crsp.to_parquet(DATA_DIR / "pulled" / "Mutual_Fund.parquet")
