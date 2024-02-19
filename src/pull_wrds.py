@@ -29,7 +29,7 @@ def pull_13f(wrds_username=WRDS_USERNAME):
 
 def pull_mf_mapping(wrds_username=WRDS_USERNAME):
     sql_query = """
-        SELECT a.fdate, a.mgrcoab, a.mgrco
+        SELECT a.fdate, a.mgrco
         FROM 
             tr_mutualfunds.s12type7 AS a
         WHERE 
