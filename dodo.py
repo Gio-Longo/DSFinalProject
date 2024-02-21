@@ -67,6 +67,22 @@ def task_pull_fred():
     }
 
 
+def task_pull_wrds():
+    """ """
+    file_dep = ["./src/pull_wrds.py"]
+    file_output = ["13f.parquet",  "Mutual_Fund.parquet"]
+    targets = [DATA_DIR / "pulled" / file for file in file_output]
+
+    return {
+        "actions": [
+            "ipython ./src/pull_wrds.py",
+        ],
+        "targets": targets,
+        "file_dep": file_dep,
+        "clean": True,
+    }
+
+
 # def task_pull_data_via_presto():
 #     """
 #     Run several data pulls
