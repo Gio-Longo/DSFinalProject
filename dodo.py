@@ -9,6 +9,7 @@ import config
 from pathlib import Path
 from doit.tools import run_once
 import platform
+from misc_tools import timer
 
 OUTPUT_DIR = Path(config.OUTPUT_DIR)
 DATA_DIR = Path(config.DATA_DIR)
@@ -50,23 +51,23 @@ def copy_notebook_to_folder(notebook_stem, origin_folder, destination_folder):
         command = f"copy  {origin_path} {destination_path}"
     return command
 
-
+@timer
 def task_pull_fred():
     """ """
     file_dep = ["./src/load_fred.py"]
     file_output = ["fred.parquet"]
-    targets = [DATA_DIR / "pulled" / file for file in file_output]
+    targets = [Path(DATA_DIR) / "pulled" / file for file in file_output]
 
     return {
         "actions": [
-            "ipython ./src/load_fred.py",
+            "ipython src/load_fred.py",
         ],
         "targets": targets,
         "file_dep": file_dep,
         "clean": True,
     }
 
-
+@timer
 def task_pull_wrds():
     """ """
     file_dep = ["./src/pull_wrds.py"]
@@ -75,12 +76,12 @@ def task_pull_wrds():
 
     return {
         "actions": [
-            "ipython ./src/pull_wrds.py",
+            "ipython src/pull_wrds.py",
         ],
         "targets": targets,
         "file_dep": file_dep,
         "clean": True,
-    }
+   }
 
 
 # def task_pull_data_via_presto():

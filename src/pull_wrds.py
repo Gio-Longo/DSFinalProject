@@ -6,14 +6,12 @@ import wrds
 
 import config
 from pathlib import Path
-from misc_tools import timer
 
 OUTPUT_DIR = Path(config.OUTPUT_DIR)
 DATA_DIR = Path(config.DATA_DIR)
 WRDS_USERNAME = config.WRDS_USERNAME
 
 
-@timer
 def pull_13f(wrds_username=WRDS_USERNAME, start_date = '03/31/2015', end_date = '12/31/2017'):
 
     my_params = {'start_date':start_date, 'end_date': end_date}
@@ -33,7 +31,6 @@ def pull_13f(wrds_username=WRDS_USERNAME, start_date = '03/31/2015', end_date = 
 
     return df_13f
 
-@timer
 def pull_mf_mapping(wrds_username=WRDS_USERNAME, start_date = '03/31/2015', end_date = '12/31/2017'):
 
     my_params = {'start_date':start_date, 'end_date': end_date}
