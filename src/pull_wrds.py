@@ -12,7 +12,7 @@ DATA_DIR = Path(config.DATA_DIR)
 WRDS_USERNAME = config.WRDS_USERNAME
 
 
-def pull_13f(wrds_username=WRDS_USERNAME, start_date = '03/31/2015', end_date = '12/31/2017'):
+def pull_13f(wrds_username=WRDS_USERNAME, start_date = '03/31/1980', end_date = '12/31/2017'):
 
     my_params = {'start_date':start_date, 'end_date': end_date}
 
@@ -31,7 +31,7 @@ def pull_13f(wrds_username=WRDS_USERNAME, start_date = '03/31/2015', end_date = 
 
     return df_13f
 
-def pull_mf_mapping(wrds_username=WRDS_USERNAME, start_date = '03/31/2015', end_date = '12/31/2017'):
+def pull_mf_mapping(wrds_username=WRDS_USERNAME, start_date = '03/31/1980', end_date = '12/31/2017'):
 
     my_params = {'start_date':start_date, 'end_date': end_date}
 
