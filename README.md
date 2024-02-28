@@ -1,4 +1,4 @@
-Project Title HERE
+A Demand System Approach to Asset Pricing Verification
 ==================
 
 # About this project

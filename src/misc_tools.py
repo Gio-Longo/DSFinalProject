@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
 import matplotlib.dates as mdates
+import time
 
 from dateutil.relativedelta import relativedelta
 from datetime import date
@@ -16,6 +17,16 @@ import pandas_market_calendars
 ########################################################################################
 ## Pandas Helpers
 ########################################################################################
+
+def timer(func):
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        result = func(*args, **kwargs)
+        end_time = time.time()
+        elapsed_time = round((end_time - start_time)/60,2)
+        print(f"Elapsed time for {func.__name__}: {elapsed_time} minutes")
+        return result
+    return wrapper
 
 def merge_stats(df_left, df_right, on=[]):
     """Provide statistics to assess the completeness of the merge.
