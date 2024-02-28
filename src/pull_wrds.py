@@ -18,12 +18,14 @@ def pull_13f(wrds_username=WRDS_USERNAME, start_date = '03/31/1980', end_date = 
 
     sql_query = """
         SELECT 
-            a.fdate, a.mgrno, a.mgrname,  a.typecode, a.cusip, a.shares, a.prc, a.shrout1
+            a.fdate, a.mgrno, a.mgrname,  a.typecode, a.cusip, a.shares, a.prc, a.shrout1, a.stkcd, a.exchcd
 
         FROM 
             tr_13f.s34 AS a
         WHERE 
             a.fdate BETWEEN '03/31/1980' AND '12/31/2017'
+            AND a.prc IS NOT NULL 
+            AND a.shrout1 IS NOT NULL
         """
 
     db = wrds.Connection(wrds_username=wrds_username)
