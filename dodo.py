@@ -9,7 +9,6 @@ import config
 from pathlib import Path
 from doit.tools import run_once
 import platform
-from misc_tools import timer
 
 OUTPUT_DIR = Path(config.OUTPUT_DIR)
 DATA_DIR = Path(config.DATA_DIR)
@@ -50,8 +49,7 @@ def copy_notebook_to_folder(notebook_stem, origin_folder, destination_folder):
     else:
         command = f"copy  {origin_path} {destination_path}"
     return command
- 
-@timer
+
 def task_pull_wrds():
     """ """
     file_dep = ["./src/pull_wrds.py"]
