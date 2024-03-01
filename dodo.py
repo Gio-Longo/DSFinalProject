@@ -9,7 +9,6 @@ import config
 from pathlib import Path
 from doit.tools import run_once
 import platform
-from misc_tools import timer
 
 OUTPUT_DIR = Path(config.OUTPUT_DIR)
 DATA_DIR = Path(config.DATA_DIR)
