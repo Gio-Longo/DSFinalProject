@@ -120,26 +120,23 @@ def task_pull_wrds():
 #         "file_dep": file_dep,
 #     }
 
-
+#Converts the df to LaTex
 def task_summary_stats():
     """ """
-    file_dep = ["./src/example_table.py"]
+    file_dep = ["./src/dfs_to_latex.py"]
     file_output = [
-        "example_table.tex",
-        "pandas_to_latex_simple_table1.tex",
+        "table_1d.tex",
         ]
     targets = [OUTPUT_DIR / file for file in file_output]
 
     return {
         "actions": [
-            "ipython ./src/example_table.py",
-            "ipython ./src/pandas_to_latex_demo.py",
+            "ipython ./src/dfs_to_latex.py",
         ],
         "targets": targets,
         "file_dep": file_dep,
         "clean": True,
     }
-
 
 def task_example_plot():
     """Example plots"""

@@ -3,6 +3,9 @@ from pathlib import Path
 DATA_DIR = Path(config.DATA_DIR)
 OUTPUT_DIR = Path(config.OUTPUT_DIR)
 
+# Define dfs to be equal to the output of the 
+# constructor for dfs
+
 def generate_latex_string(dfs):
   start = r"""\documentclass{article}
     \usepackage{caption}
@@ -45,8 +48,9 @@ def generate_latex_string(dfs):
 
   return start+body+end
 
-def gen_tex(dfs):
-    doc_string = generate_latex_string(dfs)
-    path = OUTPUT_DIR / f'table_doc.tex'
-    with open(path, "w") as text_file:
-        text_file.write(doc_string)
+doc_string = generate_latex_string(dfs)
+path = OUTPUT_DIR / f'table_doc.tex'
+with open(path, "w") as text_file:
+    text_file.write(doc_string)
+
+
