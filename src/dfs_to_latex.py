@@ -3,9 +3,6 @@ from pathlib import Path
 DATA_DIR = Path(config.DATA_DIR)
 OUTPUT_DIR = Path(config.OUTPUT_DIR)
 
-# Define dfs to be equal to the output of the 
-# constructor for dfs
-
 def generate_latex_string(dfs):
   start = r"""\documentclass{article}
     \usepackage{caption}
@@ -34,7 +31,8 @@ def generate_latex_string(dfs):
   2.0: 'B. Insurance companies',
   3.0: 'C. Investment advisors',
   4.0: 'D. Mutual funds',
-  5.0: 'E. Pension funds'}
+  5.0: 'E. Pension funds',
+  6.0: 'E. Other'}
 
   body = ""
   for type_index, type_value in type_dict.items():
@@ -48,9 +46,10 @@ def generate_latex_string(dfs):
 
   return start+body+end
 
-doc_string = generate_latex_string(dfs)
-path = OUTPUT_DIR / f'table_doc.tex'
-with open(path, "w") as text_file:
-    text_file.write(doc_string)
+def df_to_latex(dfs, output):
+  doc_string = generate_latex_string(dfs)
+  path = OUTPUT_DIR / output
+  with open(path, "w") as text_file:
+      text_file.write(doc_string)
 
 
