@@ -12,7 +12,7 @@ DATA_DIR = Path(config.DATA_DIR)
 WRDS_USERNAME = config.WRDS_USERNAME
 
 
-def pull_13f(wrds_username=WRDS_USERNAME, start_date = '03/31/1980', end_date = '12/31/1984'):
+def pull_13f(wrds_username=WRDS_USERNAME, start_date = '03/31/1980', end_date = '12/31/2024'):
 
     my_params = {'start_date':start_date, 'end_date': end_date}
 
@@ -34,7 +34,7 @@ def pull_13f(wrds_username=WRDS_USERNAME, start_date = '03/31/1980', end_date = 
 
     return df_13f
 
-def pull_mf_mapping(wrds_username=WRDS_USERNAME, start_date = '03/31/1980', end_date = '12/31/1984'):
+def pull_mf_mapping(wrds_username=WRDS_USERNAME, start_date = '03/31/1980', end_date = '12/31/2024'):
 
     my_params = {'start_date':start_date, 'end_date': end_date}
 
@@ -68,6 +68,8 @@ def _demo():
     crsp = load_Mutual_Fund(data_dir=DATA_DIR)
 
 if __name__ == "__main__":
+    Path(DATA_DIR / "pulled").mkdir(parents=True, exist_ok=True)
+
     comp = pull_13f(wrds_username=WRDS_USERNAME)
     comp.to_parquet(DATA_DIR / "pulled" / "13f.parquet")
 
