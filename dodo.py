@@ -50,23 +50,7 @@ def copy_notebook_to_folder(notebook_stem, origin_folder, destination_folder):
     else:
         command = f"copy  {origin_path} {destination_path}"
     return command
-
-@timer
-def task_pull_fred():
-    """ """
-    file_dep = ["./src/load_fred.py"]
-    file_output = ["fred.parquet"]
-    targets = [Path(DATA_DIR) / "pulled" / file for file in file_output]
-
-    return {
-        "actions": [
-            "ipython src/load_fred.py",
-        ],
-        "targets": targets,
-        "file_dep": file_dep,
-        "clean": True,
-    }
-
+ 
 @timer
 def task_pull_wrds():
     """ """
