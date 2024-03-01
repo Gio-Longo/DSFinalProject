@@ -51,7 +51,6 @@ def copy_notebook_to_folder(notebook_stem, origin_folder, destination_folder):
         command = f"copy  {origin_path} {destination_path}"
     return command
 
-@timer
 def task_pull_fred():
     """ """
     file_dep = ["./src/load_fred.py"]
@@ -67,7 +66,6 @@ def task_pull_fred():
         "clean": True,
     }
 
-@timer
 def task_pull_wrds():
     """ """
     file_dep = ["./src/pull_wrds.py"]
