@@ -23,8 +23,7 @@ def percentile(n):
     return percentile_
 
 
-def build_DFs(cleaned_data, periods):
-    df = pd.read_parquet(cleaned_data)
+def build_DFs(df, periods):
     df = df[df['fdate'].between(periods[0][0],periods[-1][1])]
 
     df['Qtr'] = df['fdate'].dt.to_period('Q')
@@ -73,6 +72,3 @@ def build_DFs(cleaned_data, periods):
         df_list[period] = by_type
 
     return df_list
-
-# dfs = build_DFs('13f.parquet',[('1980-01-01','1984-12-31')])
-# dfs[('1980-01-01','1984-12-31')]
