@@ -1,19 +1,23 @@
 import pandas as pd
 import numpy as np
 
-def clean_data(period):
+import config
+from pathlib import Path
+DATA_DIR = Path(config.DATA_DIR)
+
+def clean_data(period, data_dir = DATA_DIR):
     start, end = period
     
-    df = pd.read_parquet("data/pulled/13f.parquet")
+    df = pd.read_parquet(data_dir / "pulled/13f.parquet")
     df = df[df['fdate'] <= end]
     df = df.dropna(subset=['prc','shrout1'])
     df = df[(df['stkcd']=='0') | (df['stkcd'].isnull())]
     df = df[(df['exchcd'].isin(['A','B','V']))  | (df['exchcd'].isnull())]
 
-    df_mf = pd.read_parquet("data/pulled/Mutual_Fund.parquet")
+    df_mf = pd.read_parquet(data_dir / "pulled/Mutual_Fund.parquet")
     df['mf'] = df['mgrname'].isin(df_mf['mgrco'].drop_duplicates())
 
-    df_pf = pd.read_csv('data/manual/PF_names.csv')
+    df_pf = pd.read_csv(data_dir / "manual/PF_names.csv")
     df['pf'] = df['mgrname'].isin(df_pf['PF_name'])
 
     last_type_before_dec98 = df[df['fdate'] < '1998-12-01'].groupby(['mgrno', 'mgrname'])['typecode'].last().rename('typecode_correct')
