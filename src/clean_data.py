@@ -15,7 +15,7 @@ def clean_data(period, data_dir = DATA_DIR):
     df = df[(df['exchcd'].isin(['A','B','V']))  | (df['exchcd'].isnull())]
 
     df_mf = pd.read_parquet(data_dir / "pulled/Mutual_Fund.parquet")
-    df['mf'] = df['mgrname'].isin(df_mf['mgrco'].drop_duplicates())
+    df['mf'] = df['mgrname'].isin(df_mf[df_mf['fdate'] <= '2017-12-31']['mgrco'].drop_duplicates())
 
     df_pf = pd.read_csv(data_dir / "manual/PF_names.csv")
     df['pf'] = df['mgrname'].isin(df_pf['PF_name'])
@@ -31,7 +31,7 @@ def clean_data(period, data_dir = DATA_DIR):
     df['new_typecode'] = np.nan
     df.loc[df['typecode'] == 1, 'new_typecode'] = 1
     df.loc[df['typecode'] == 2, 'new_typecode'] = 2
-    df.loc[df['typecode'] == 3, 'new_typecode'] = 3
+    df.loc[df['typecode'].isin([3,4]), 'new_typecode'] = 3
     df.loc[df.groupby(['mgrno', 'mgrname'])['mf'].transform('any') & df['typecode'].isin([3,4,5]), 'new_typecode'] = 4
     df.loc[df.groupby(['mgrno', 'mgrname'])['pf'].transform('any') & df['typecode'].isin([3,4,5]), 'new_typecode'] = 5
     df['new_typecode'] = df['new_typecode'].fillna(6)
