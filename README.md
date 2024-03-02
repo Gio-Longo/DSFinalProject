@@ -1,6 +1,6 @@
 # A Demand System Approach to Asset Pricing Verification 
 ### Replication of Table D1 
-=======================================================================================================
+===================================================================================
 ## Project Summary - Challenges and Successes
 
 A Demand System Approach to Asset Pricing by Ralph S.J. Koijen and Motohiro Yogo discuss the restrictions of the law of one price in asset pricing and it further evaluates the sensitivity of investors given the price changes with limited arbitrage in the stock market. In this project, we replicated Table D1 - A summary of 13F institutions by type - which provides financial statistics for banks, insurance companies, investment advisors, mutual funds and pension funds starting from 1980 until 2017.
