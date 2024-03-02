@@ -2,10 +2,12 @@ import pandas as pd
 import numpy as np
 
 import config
-from pathlib import Path
-DATA_DIR = Path(config.DATA_DIR)
+DATA_DIR = config.DATA_DIR
 
-def clean_data(period, data_dir = DATA_DIR):
+STARTDATE = config.STARTDATE_OLD
+ENDDATE = config.ENDDATE_OLD
+
+def clean_data(period = (STARTDATE, ENDDATE), data_dir = DATA_DIR):
     start, end = period
     
     df = pd.read_parquet(data_dir / "pulled/13f.parquet")

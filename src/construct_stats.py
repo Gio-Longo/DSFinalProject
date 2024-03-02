@@ -5,11 +5,13 @@ import plotnine as p9
 import clean_data
 from mizani.formatters import custom_format
 
-output_dir = config.OUTPUT_DIR
+output_dir = Path(config.OUTPUT_DIR)
 
 plot_path = output_dir / 'plots'
 plot_path.mkdir(parents=True, exist_ok=True)
 
+STARTDATE = config.STARTDATE_OLD
+ENDDATE = config.ENDDATE_NEW
 
 def pivot_table(table, col_val):
     return table.pivot_table(
@@ -46,13 +48,13 @@ def create_mgrs_df(cleaned_df):
     return pivot_table(unique_mgr_counts_by_type, 'UniqueMgrCounts')
 
 
-def create_stats(start_date, end_date):
+def construct_stats(cleaned_df):
     '''
     Creates three data frames that contain useful plotting information. The three dataframes are the
     total number of institutions at each quarter, the total AUM by institution type per quarter, and
     the number of unqiue manager name/number pairs per quarter.
     '''
-    cleaned_df = clean_data.clean_data((pd.to_datetime(start_date), pd.to_datetime(end_date)))
+
     cleaned_df['AUM'] = cleaned_df['prc'] * cleaned_df['shares']
 
     type_counts_df = create_type_counts_df(cleaned_df).reset_index()
@@ -70,7 +72,7 @@ def create_stats(start_date, end_date):
     return stats
 
 
-def plot_stats_data(stats_df, value_name, title, file_name, condense=False):
+def plot_stats_data(stats_df, value_name, title, file_name, path = plot_path, condense=False):
     df = stats_df.copy()
     df.reset_index(inplace=True)
     long_df = stats_df.melt(id_vars=['fdate'], var_name='Type', value_name=value_name)
@@ -92,11 +94,12 @@ def plot_stats_data(stats_df, value_name, title, file_name, condense=False):
         )
     )
     
-    plot.save(filename=file_name, path=str(plot_path), dpi=300)
+    plot.save(filename=file_name, path=str(path), dpi=300)
 
 
 if __name__ == '__main__':
-    type_counts_df, aum_df, mgrs_df = create_stats('1980-03-31', '2024-12-31')
+    cleaned_df = clean_data.clean_data(STARTDATE, ENDDATE)
+    type_counts_df, aum_df, mgrs_df = construct_stats(cleaned_df)
 
     plot_stats_data(type_counts_df, 'Count', 'Type Counts Over Time', 'type_counts.png')
     plot_stats_data(aum_df, 'AUM', 'AUM Over Time', 'aum.png', True)
