@@ -38,4 +38,4 @@ def clean_data(period, data_dir = DATA_DIR):
     df['typecode'] = df['new_typecode']
 
     df = df[df['fdate'] >= start]
-    return df[['fdate', 'mgrno', 'mgrname', 'typecode', 'prc', 'shrout1']]
+    return df[['fdate', 'mgrno', 'mgrname', 'typecode', 'shares', 'prc', 'shrout1']]
