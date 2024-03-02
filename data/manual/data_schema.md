@@ -31,9 +31,9 @@
 
 ## Manual Data
 **Note**
-- This is the manual data mapped from the pdf file
+- This is the manual data mapped from the PDF file
 
-## Pension Fund Mapping
+## Pension Fund Names
 |  **Name**  |
 |:----------:|
 | mgrco      |
