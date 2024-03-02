@@ -1,4 +1,5 @@
-# A Demand System Approach to Asset Pricing Verification
+# A Demand System Approach to Asset Pricing Verification by Ralph S.J. Koijen and Motohiro Yogo
+### Replication of Table D1 
 ==================
 ## Project Summary - Challenges and Successes
 
