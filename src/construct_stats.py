@@ -72,7 +72,7 @@ def construct_stats(cleaned_df):
     return stats
 
 
-def plot_stats_data(stats_df, value_name, title, file_name, path = plot_path, condense=False):
+def plot_stats_data(stats_df, value_name, title, file_name, condense=False, path = plot_path):
     df = stats_df.copy()
     df.reset_index(inplace=True)
     long_df = stats_df.melt(id_vars=['fdate'], var_name='Type', value_name=value_name)
@@ -98,7 +98,8 @@ def plot_stats_data(stats_df, value_name, title, file_name, path = plot_path, co
 
 
 if __name__ == '__main__':
-    cleaned_df = clean_data.clean_data(STARTDATE, ENDDATE)
+    cleaned_df = clean_data.clean_data((STARTDATE, ENDDATE))
+    print('Here')
     type_counts_df, aum_df, mgrs_df = construct_stats(cleaned_df)
 
     plot_stats_data(type_counts_df, 'Count', 'Type Counts Over Time', 'type_counts.png')
