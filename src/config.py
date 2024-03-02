@@ -26,6 +26,12 @@ DATA_DIR = config('DATA_DIR', default=(BASE_DIR / 'data'), cast=Path)
 OUTPUT_DIR = config('OUTPUT_DIR', default=(BASE_DIR / 'output'), cast=Path)
 WRDS_USERNAME = config("WRDS_USERNAME", default="")
 
+STARTDATE_OLD = '1980-01-01'
+ENDDATE_OLD = '2017-12-31'
+
+STARTDATE_NEW = '2018-01-01'
+ENDDATE_NEW = '2024-12-31'
+
 if __name__ == "__main__":
     
     ## If they don't exist, create the data and output directories
