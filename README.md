@@ -9,21 +9,21 @@ Overall, it would be unfair to claim the replication process was entirely smooth
 
 ## Weekly Task List
 
-### 02/12/2024
+### Week of 02/12/2024
 - Daniel
 - Dylan
 - Gio
 - Nick
 - Sarp
 
-### 02/19/2024
+### Week of 02/19/2024
 - Daniel
 - Dylan
 - Gio
 - Nick
 - Sarp
 
-### 02/26/2024
+### Week of 02/26/2024
 - Daniel
 - Dylan
 - Gio
