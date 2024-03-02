@@ -31,9 +31,9 @@ def clean_data(period, data_dir = DATA_DIR):
     df['new_typecode'] = np.nan
     df.loc[df['typecode'] == 1, 'new_typecode'] = 1
     df.loc[df['typecode'] == 2, 'new_typecode'] = 2
+    df.loc[df['typecode'] == 3, 'new_typecode'] = 3
     df.loc[df.groupby(['mgrno', 'mgrname'])['mf'].transform('any') & df['typecode'].isin([3,4,5]), 'new_typecode'] = 4
     df.loc[df.groupby(['mgrno', 'mgrname'])['pf'].transform('any') & df['typecode'].isin([3,4,5]), 'new_typecode'] = 5
-    df.loc[df['typecode'] == 3, 'new_typecode'] = 3
     df['new_typecode'] = df['new_typecode'].fillna(6)
     df['typecode'] = df['new_typecode']
 
