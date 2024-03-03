@@ -1,3 +1,7 @@
+"""
+Unit tests to confirm correct table construction
+"""
+
 import config
 import os
 

@@ -1,3 +1,17 @@
+"""
+Cleans data based on parameters given in the paper.
+
+- Loads main 13F data from parquet, and removes missing price (prc) or shares outstanding (shrout1).
+- Filters entries not matching chosen stock codes (stkcd) or exchange codes (exchcd)
+- Marks mutual/pension funds cross-referenced against Mutual_Fund and pension funds lists
+- Adjusts typecode for entries before 1998 with the most recent typecode per manager; reclassifies typecode
+    based on flag/original typecode
+- Restricts start/end date
+
+Takes period (tuple, start/end date) and the data directory (Path, with data) and returns a dataframe
+"""
+
+
 import pandas as pd
 import numpy as np
 

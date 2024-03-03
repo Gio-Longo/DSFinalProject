@@ -1,3 +1,11 @@
+"""
+Module for fetching and storing data from WRDS
+
+- 13F data retrieval, using docs from https://wrds-www.wharton.upenn.edu/data-dictionary/tr_13f/s34/
+- mutual fund mappings for 300 mutual funds, not described under categories in 13F
+"""
+
+
 import pandas as pd
 import time
 
