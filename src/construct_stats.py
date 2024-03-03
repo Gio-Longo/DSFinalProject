@@ -104,7 +104,7 @@ if __name__ == '__main__':
     print('Here')
     type_counts_df, aum_df, mgrs_df = construct_stats(cleaned_df)
 
-    plot_stats_data(type_counts_df, 'Count', 'Type Counts Over Time', 'type_counts.png')
+    plot_stats_data(type_counts_df, 'Count', 'Institution Type Counts Over Time', 'type_counts.png')
     plot_stats_data(aum_df, 'AUM', 'AUM Over Time', 'aum.png', True)
     plot_stats_data(mgrs_df, 'UniqueMgrCounts', 'Managers Over Time', 'mgrs.png')
     
