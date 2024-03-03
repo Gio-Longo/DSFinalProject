@@ -22,6 +22,10 @@ STARTDATE = config.STARTDATE_OLD
 ENDDATE = config.ENDDATE_OLD
 
 def clean_data(period = (STARTDATE, ENDDATE), data_dir = DATA_DIR):
+    """
+    Takes period (tuple, start/end date) and the data directory (Path, with data)
+    returns a dataframe of cleaned data
+    """
     start, end = period
     
     df = pd.read_parquet(data_dir / "pulled/13f.parquet")

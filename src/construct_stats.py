@@ -1,13 +1,4 @@
 """
-It includes functions to:
-- Pivot data into tables based on specific columns.
-- Create dataframes for the count of institutions, AUM by type, and unique manager name/number pairs.
-- Plot these statistics over time.
-
-Dependencies include pandas for data manipulation, plotnine for plotting, and custom modules for data cleaning.
-
-
-
 Constructs statistics by quarter for total number of institutions, 
 AUM by type, and unique manager name/number pairs into tables 
 and plots the data.
@@ -15,8 +6,7 @@ and plots the data.
 Functions:
 - Pivot data into tables based on specific columns.
 - Create dataframes for the count of institutions, AUM by type, and unique manager name/number pairs.
-- Plot these statistics over time.
-
+- Plot statistics over time.
 """
 
 import config
@@ -36,6 +26,10 @@ STARTDATE = config.STARTDATE_OLD
 ENDDATE = config.ENDDATE_NEW
 
 def pivot_table(table, col_val):
+    """
+    Creates a pivot table from a DataFrame, indexing by date (fdate), 
+    and aggregates values by typecode
+    """
     return table.pivot_table(
         index='fdate',
         columns='typecode', 
@@ -44,6 +38,10 @@ def pivot_table(table, col_val):
 
 
 def create_type_counts_df(cleaned_df):
+    """
+    Produces a DataFrame showing counts of unique 'typecode' values by 'fdate', 
+    ensuring that each 'mgrno' and 'mgrname' pair is counted only once per 'fdate'
+    """
     inst_df = cleaned_df.copy()
     inst_df = (inst_df.groupby('fdate', as_index=False)
                .apply(lambda x: x.drop_duplicates(subset=['mgrno', 'mgrname'])).reset_index(drop=True))
@@ -53,6 +51,10 @@ def create_type_counts_df(cleaned_df):
 
 
 def create_aum_df(cleaned_df):
+    """
+    Generates a DataFrame summarizing the total AUM by 'typecode' and 'fdate', aggregating
+    AUM values for unique 'mgrno' and 'mgrname' combinations (since they are the same manager)
+    """
     summed_aum_with_typecode = cleaned_df.groupby(['fdate', 'mgrno', 'mgrname']).agg({
         'AUM': 'sum',
         'typecode': 'first'  
@@ -65,6 +67,10 @@ def create_aum_df(cleaned_df):
 
 
 def create_mgrs_df(cleaned_df):
+    """
+    DataFrame counting unique 'mgrno' and 'mgrname' pairs by 'typecode' and 'fdate'
+    for distribution over time
+    """
     unique_mgr_counts_by_type = (cleaned_df.groupby(['fdate', 'typecode'])
                                  .apply(lambda x: x.drop_duplicates(['mgrno', 'mgrname']).shape[0]).reset_index(name='UniqueMgrCounts'))
     return pivot_table(unique_mgr_counts_by_type, 'UniqueMgrCounts')
@@ -95,6 +101,9 @@ def construct_stats(cleaned_df):
 
 
 def plot_stats_data(stats_df, value_name, title, file_name, condense=False, path = plot_path):
+    """
+    Plots institution counts over time
+    """
     df = stats_df.copy()
     df.reset_index(inplace=True)
     long_df = stats_df.melt(id_vars=['fdate'], var_name='Type', value_name=value_name)

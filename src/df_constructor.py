@@ -1,29 +1,16 @@
 """
-This module provides functions to construct and analyze financial metrics from a given dataset. 
+Functions to reconstruct metrics from the original table
 
 Functions:
 - roll_stocks(group): Rolls up quarterly stock data to calculate the unique count of 'cusip' identifiers 
   within a rolling window of up to 12 quarters for each group.
 - market_val(df): Calculates the total market value by multiplying the price ('prc') and shares outstanding 
-  ('shrout1') for each unique 'cusip', summing up these values across the dataset.
-- percentile(n): Factory function that returns a function to compute the nth percentile of a distribution, 
-  which can be used as an aggregation function in pandas.
-- build_DFs(df, periods): Processes the input dataframe to compute aggregated financial metrics for fund 
-  managers over specified periods. The function aggregates data on various levels, including by manager and 
-  type, and calculates metrics such as assets under management (AUM), stock counts, and market values.
+  ('shrout1') for each unique 'cusip'
+- percentile(n): Computes the nth percentile
+- build_DFs(df, periods): Returns metrics: AUM, stock counts, and market value
 
-Parameters:
-- df (DataFrame): The input data containing financial and managerial information.
-- periods (list of tuples): A list of tuples where each tuple represents a period with a start and end date.
-- group (DataFrameGroupBy object): A grouped subset of the main dataframe, typically grouped by a certain key.
-
-Returns:
-- A dictionary where keys are period tuples and values are DataFrames containing aggregated financial metrics 
-  for each period.
-
-Dependencies:
-- pandas: Used for data manipulation and aggregation.
-- numpy: Utilized for numerical operations, especially for percentile calculations.
+Parameters: df (DataFrame), periods (list of tuples, split according to paper), group (DataFrameGroupBy object, subset of main df)
+Returns: Dictionary where keys are period tuples and values are DataFrames containing aggregated metrics per period
 """
 
 
@@ -31,6 +18,11 @@ import pandas as pd
 import numpy as np
 
 def roll_stocks(group):
+    """
+    Aggregates a rolling count of unique 'cusip' identifiers within each group for up to 12 quarters.
+    Returns:
+        DataFrame: 'Qtr' for quarters and 'universe' for unique 'cusip' counts
+    """
     uc_dict = {'Qtr': [], 'universe': []}
     quarters = group['Qtr'].unique()
     for i, q in enumerate(quarters):
@@ -41,11 +33,20 @@ def roll_stocks(group):
     return pd.DataFrame(uc_dict)
 
 def market_val(df):
+    """
+    Calculates the total market value per cusip by multiplying its price ('prc')
+    with the shares outstanding ('shrout1'), after removing duplicates
+    Returns:
+        float: The total market value of all unique 'cusip' in the DataFrame
+    """
     df = df.drop_duplicates(subset=['cusip'])
     df['val'] = df['prc'] * df['shrout1']*1000000
     return df['val'].sum()
 
 def percentile(n):
+    """
+    Returns: function which returns the nth percentile of a series (rounded)
+    """
     def percentile_(x):
         return x.quantile(n)
     percentile_.__name__ = 'percentile_{:02.0f}'.format(n*100)
@@ -53,6 +54,11 @@ def percentile(n):
 
 
 def build_DFs(df, periods):
+    """
+    Constructs DataFrames for specified periods containing aggregated metrics
+    Returns:
+        dict: Keys are period tuples, values are DataFrames with aggregated metrics for each period
+    """
     df = df[df['fdate'].between(periods[0][0],periods[-1][1])]
 
     df['Qtr'] = df['fdate'].dt.to_period('Q')

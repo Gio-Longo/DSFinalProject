@@ -24,7 +24,10 @@ range_old = ('1980-01-01','2017-12-31')
 range_new = ('2018-01-01','2023-12-31')
 
 def construct_full_report():
-    
+    """
+    Calls required functions to build the final LaTeX table
+    """
+
     df_old = clean_data(range_old)
     df_new = clean_data(range_new)
 

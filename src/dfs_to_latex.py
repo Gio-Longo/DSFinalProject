@@ -9,6 +9,9 @@ DATA_DIR = Path(config.DATA_DIR)
 OUTPUT_DIR = Path(config.OUTPUT_DIR)
 
 def generate_latex_string(dfs):
+  """
+  Inserts the dataframe data into the preconstructed LaTeX table layout
+  """
   start = r"""\documentclass{article}
     \usepackage{caption}
     \usepackage[top=0.75in, left=1in,right=1in]{geometry}
@@ -52,6 +55,9 @@ def generate_latex_string(dfs):
   return start+body+end
 
 def df_to_latex(dfs, output):
+  """
+  Calls LaTeX generation
+  """
   doc_string = generate_latex_string(dfs)
   path = OUTPUT_DIR / output
   with open(path, "w") as text_file:
