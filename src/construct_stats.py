@@ -4,6 +4,7 @@ import pandas as pd
 import plotnine as p9
 import clean_data
 from mizani.formatters import custom_format
+from IPython.display import display
 
 output_dir = Path(config.OUTPUT_DIR)
 
@@ -95,7 +96,7 @@ def plot_stats_data(stats_df, value_name, title, file_name, condense=False, path
     )
     
     plot.save(filename=file_name, path=str(path), dpi=300)
-    plot.draw()
+    display(plot)
 
 
 if __name__ == '__main__':
