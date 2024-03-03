@@ -1,3 +1,32 @@
+"""
+This module provides functions to construct and analyze financial metrics from a given dataset. 
+
+Functions:
+- roll_stocks(group): Rolls up quarterly stock data to calculate the unique count of 'cusip' identifiers 
+  within a rolling window of up to 12 quarters for each group.
+- market_val(df): Calculates the total market value by multiplying the price ('prc') and shares outstanding 
+  ('shrout1') for each unique 'cusip', summing up these values across the dataset.
+- percentile(n): Factory function that returns a function to compute the nth percentile of a distribution, 
+  which can be used as an aggregation function in pandas.
+- build_DFs(df, periods): Processes the input dataframe to compute aggregated financial metrics for fund 
+  managers over specified periods. The function aggregates data on various levels, including by manager and 
+  type, and calculates metrics such as assets under management (AUM), stock counts, and market values.
+
+Parameters:
+- df (DataFrame): The input data containing financial and managerial information.
+- periods (list of tuples): A list of tuples where each tuple represents a period with a start and end date.
+- group (DataFrameGroupBy object): A grouped subset of the main dataframe, typically grouped by a certain key.
+
+Returns:
+- A dictionary where keys are period tuples and values are DataFrames containing aggregated financial metrics 
+  for each period.
+
+Dependencies:
+- pandas: Used for data manipulation and aggregation.
+- numpy: Utilized for numerical operations, especially for percentile calculations.
+"""
+
+
 import pandas as pd
 import numpy as np
 

@@ -1,3 +1,8 @@
+"""
+Produces a LaTeX table from the completed dataframe.
+
+"""
+
 import config
 from pathlib import Path
 DATA_DIR = Path(config.DATA_DIR)

@@ -1,3 +1,7 @@
+"""
+Constructs the LaTeX report with the finished table.
+"""
+
 from clean_data import *
 from df_constructor import *
 from construct_stats import *

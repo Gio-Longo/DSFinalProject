@@ -1,3 +1,24 @@
+"""
+It includes functions to:
+- Pivot data into tables based on specific columns.
+- Create dataframes for the count of institutions, AUM by type, and unique manager name/number pairs.
+- Plot these statistics over time.
+
+Dependencies include pandas for data manipulation, plotnine for plotting, and custom modules for data cleaning.
+
+
+
+Constructs statistics by quarter for total number of institutions, 
+AUM by type, and unique manager name/number pairs into tables 
+and plots the data.
+
+Functions:
+- Pivot data into tables based on specific columns.
+- Create dataframes for the count of institutions, AUM by type, and unique manager name/number pairs.
+- Plot these statistics over time.
+
+"""
+
 import config
 from pathlib import Path
 import pandas as pd
@@ -53,7 +74,7 @@ def construct_stats(cleaned_df):
     '''
     Creates three data frames that contain useful plotting information. The three dataframes are the
     total number of institutions at each quarter, the total AUM by institution type per quarter, and
-    the number of unqiue manager name/number pairs per quarter.
+    the number of unique manager name/number pairs per quarter.
     '''
 
     cleaned_df['AUM'] = cleaned_df['prc'] * cleaned_df['shares']

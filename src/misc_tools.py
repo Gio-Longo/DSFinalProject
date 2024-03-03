@@ -1,5 +1,7 @@
 """Collection of miscelaneous tools useful in a variety of situations
 (not specific to the current project)
+
+Original to project template
 """
 import numpy as np
 import pandas as pd
