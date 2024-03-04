@@ -1,5 +1,5 @@
 """
-Produces a LaTeX table from the completed dataframe.
+Produces a .tex file including write-up, tables, and graphs
 
 """
 
