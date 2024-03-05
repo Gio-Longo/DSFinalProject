@@ -253,7 +253,7 @@ def load_date_mapping(data_dir=None,
     pbd = pd.DataFrame(bdate_range_dvp_data_bounds, columns=['date']).reset_index().rename(columns={0:'pbd_day_num'})
     # all dates in dvp data are pandas business days.
     # Not all pandas business days are in the dvp data
-    merge_stats = misc_tools.merge_stats(df_dm, pbd, on=['date'])
+    merge_stats = merge_stats(df_dm, pbd, on=['date'])
     assert merge_stats["left-intersection"] == 0
 
     END_OF_CURRENT_YEAR = '2022-12-31'
