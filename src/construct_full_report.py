@@ -35,9 +35,11 @@ def construct_full_report():
     dfs_old = build_DFs(df_old, periods_old)
     dfs_new = build_DFs(df_new, periods_new)
 
-    dfs_stats = construct_stats(df_old)
-    all_dfs = list(dfs_old.values()) + list(dfs_new.values()) + dfs_stats
+    type_counts_df, aum_df, mgrs_df = construct_stats(df)
+    plot_stats_data(type_counts_df, 'Count', 'Institution Type Counts Over Time', 'type_counts.png'),
+    plot_stats_data(aum_df, 'AUM', 'AUM Over Time', 'aum.png', True),
+    plot_stats_data(mgrs_df, 'UniqueMgrCounts', 'Managers Over Time', 'mgrs.png')
 
     md_path = Path("../README.md")
 
-    df_to_latex_with_md_and_plots(all_dfs, md_path, "full_report.tex")
+    df_to_latex_with_md_and_plots(df_old, df_new, ['type_counts.png', 'aum.png', 'mgrs.png'], md_path, "full_report.tex")
