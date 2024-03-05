@@ -131,7 +131,6 @@ def plot_stats_data(stats_df, value_name, title, file_name, condense=False, path
 
 if __name__ == '__main__':
     cleaned_df = clean_data.clean_data((STARTDATE, ENDDATE))
-    print('Here')
     type_counts_df, aum_df, mgrs_df = construct_stats(cleaned_df)
 
     plot_stats_data(type_counts_df, 'Count', 'Institution Type Counts Over Time', 'type_counts.png')
