@@ -8,7 +8,7 @@ Cleans data based on parameters given in the paper.
     based on flag/original typecode
 - Restricts start/end date
 
-Takes period (tuple, start/end date) and the data directory (Path, with data) and returns a dataframe
+Takes period (tuple, start/end date) and the data directory (Path, with data) and returns a dataframe.
 """
 
 
