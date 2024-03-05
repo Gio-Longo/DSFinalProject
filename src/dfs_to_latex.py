@@ -87,81 +87,34 @@ def markdown_to_latex(md_path):
 
     return md_content
 
-def df_to_latex_with_md_and_plots(md_path, dfs, cleaned_df, output):
+def df_to_latex_with_md_and_plots(dfs, md_path, output):
     """
-    Combines the content of a Markdown file, LaTeX table from DataFrame, and plots into a single .tex file.
+    Combines the content of a Markdown file, LaTeX tables from multiple DataFrames, and plots into a single .tex file.
     """
     md_latex = markdown_to_latex(md_path)
-    table_latex = generate_latex_string(dfs)
 
-    type_counts_df, aum_df, mgrs_df = construct_stats(cleaned_df)
-    plot_files = [
-        plot_stats_data(type_counts_df, 'Count', 'Institution Type Counts Over Time', 'type_counts.png'),
-        plot_stats_data(aum_df, 'AUM', 'AUM Over Time', 'aum.png', True),
-        plot_stats_data(mgrs_df, 'UniqueMgrCounts', 'Managers Over Time', 'mgrs.png')
-    ]
+    full_latex = md_latex + "\n\\newpage\n"
 
-    plots_latex = ""
-    for plot_file in plot_files:
-        plots_latex += f"\n\\newpage\n\\includegraphics[width=\\textwidth]{{{plot_file}}}"
+    for df in dfs:
+        # Generate the LaTeX table for the current DataFrame
+        table_latex = generate_latex_string(df)
+        full_latex += table_latex + "\n\\newpage\n"
 
-    full_latex = md_latex + "\n\\newpage\n" + table_latex + plots_latex
+        type_counts_df, aum_df, mgrs_df = construct_stats(df)
+        plot_files = [
+            plot_stats_data(type_counts_df, 'Count', 'Institution Type Counts Over Time', f'type_counts_{dfs.index(df)}.png'),
+            plot_stats_data(aum_df, 'AUM', 'AUM Over Time', f'aum_{dfs.index(df)}.png', True),
+            plot_stats_data(mgrs_df, 'UniqueMgrCounts', 'Managers Over Time', f'mgrs_{dfs.index(df)}.png')
+        ]
 
-    path = OUTPUT_DIR / output
-    with open(path, "w") as text_file:
-        text_file.write(full_latex)
-
-# Example usage
-#md_path = DATA_DIR / 'markdown_file.md'
-#output_file = 'combined_output.tex'
-#cleaned_df = clean_data.clean_data((STARTDATE, ENDDATE))
-#df_to_latex_with_md_and_plots(md_path, dataframe_variable, cleaned_df, output_file)
-
-
-
-
-def df_to_latex_with_notebook_and_plots(notebook_path, dfs, cleaned_df, output):
-    """
-    Combines the content of a Jupyter notebook, LaTeX table from DataFrame, and plots into a single .tex file
-    """
-    notebook_latex = notebook_to_latex(notebook_path)
-
-    table_latex = generate_latex_string(dfs)
-
-    type_counts_df, aum_df, mgrs_df = construct_stats(cleaned_df)
-    plot_files = [
-        plot_stats_data(type_counts_df, 'Count', 'Institution Type Counts Over Time', 'type_counts.png'),
-        plot_stats_data(aum_df, 'AUM', 'AUM Over Time', 'aum.png', True),
-        plot_stats_data(mgrs_df, 'UniqueMgrCounts', 'Managers Over Time', 'mgrs.png')
-    ]
-
-    plots_latex = ""
-    for plot_file in plot_files:
-        plots_latex += f"\n\\newpage\n\\includegraphics[width=\\textwidth]{{{plot_file}}}"
-
-    full_latex = notebook_latex + "\n\\newpage\n" + table_latex + plots_latex
+        for plot_file in plot_files:
+            full_latex += f"\\includegraphics[width=\\textwidth]{{{plot_file}}}\n\\newpage\n"
 
     path = OUTPUT_DIR / output
     with open(path, "w") as text_file:
         text_file.write(full_latex)
 
-#notebook_path = DATA_DIR / 'notebook_name.ipynb'
+#md_path = 'your_markdown_file.md'  # Update this path as needed
 #output_file = 'combined_output.tex'
-#cleaned_df = clean_data.clean_data((STARTDATE, ENDDATE))
-#df_to_latex_with_notebook_and_plots(notebook_path, your_dataframe_variable, cleaned_df, output_file)
-
-
-
-def df_to_latex(dfs, output):
-  """
-  Calls LaTeX generation
-  """
-  doc_string = generate_latex_string(dfs)
-  path = OUTPUT_DIR / output
-  with open(path, "w") as text_file:
-      text_file.write(doc_string)
-
-
-#notebook_path = DATA_DIR / 'your_notebook_name.ipynb'
-#output_file = 'combined_output.tex'
-#df_to_latex_with_notebook(notebook_path, your_dataframe_variable, output_file)
+#dfs = [df1, df2, df3]  # Replace df1, df2, df3 with your actual DataFrame variables
+#df_to_latex_with_md_and_plots(dfs, md_path, output_file)
