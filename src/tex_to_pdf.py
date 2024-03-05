@@ -6,6 +6,7 @@ from pathlib import Path
 import config
 import os
 
+
 output_dir = Path(config.OUTPUT_DIR)
 
 def generate_pdf_from_tex(tex_file_name):
