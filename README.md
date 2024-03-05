@@ -19,7 +19,7 @@ Overall, it would be unfair to claim the replication process was entirely smooth
 - Created script to generate additional statistics and visuals from cleaned dataset
 ### Nick
 - Created script to clean dataset as specified in paper
-- Created script to compile all tables and visuals into the singular .tex report
+- Created script to compile all tables and visuals into the singular .tex report, convert .tex to pdf
 ### Sarp
 - Wrote write-up for final report
 - Created notebook walk-through of code and report generation process
