@@ -7,7 +7,6 @@ Module for fetching and storing data from WRDS
 
 
 import pandas as pd
-import time
 
 import numpy as np
 import wrds
