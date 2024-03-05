@@ -128,7 +128,7 @@ def plot_stats_data(stats_df, value_name, title, file_name, condense=False, path
     plot_path = path / file_name
     plot.save(filename=plot_path, dpi=300)
     #plot.save(filename=file_name, path=str(path), dpi=300)
-    #display(plot)
+    display(plot)
     return plot_path
 
     
