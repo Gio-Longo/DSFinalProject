@@ -74,6 +74,52 @@ def notebook_to_latex(notebook_path):
     return body
 
 
+def markdown_to_latex(md_path):
+    """
+    Reads a Markdown file and converts it to LaTeX format with specific replacements (for our markdown)
+    """
+    with open(md_path, 'r') as file:
+        md_content = file.read()
+    md_content = md_content.replace('# ', '\\section*{').replace('\n', '}\n')
+    md_content = md_content.replace('## ', '\\subsection*{').replace('\n', '}\n')
+    md_content = md_content.replace('===========================================================================\n',
+                                    '\\noindent\\makebox[\\linewidth]{\\rule{\\paperwidth}{0.4pt}}\n')
+
+    return md_content
+
+def df_to_latex_with_md_and_plots(md_path, dfs, cleaned_df, output):
+    """
+    Combines the content of a Markdown file, LaTeX table from DataFrame, and plots into a single .tex file.
+    """
+    md_latex = markdown_to_latex(md_path)
+    table_latex = generate_latex_string(dfs)
+
+    type_counts_df, aum_df, mgrs_df = construct_stats(cleaned_df)
+    plot_files = [
+        plot_stats_data(type_counts_df, 'Count', 'Institution Type Counts Over Time', 'type_counts.png'),
+        plot_stats_data(aum_df, 'AUM', 'AUM Over Time', 'aum.png', True),
+        plot_stats_data(mgrs_df, 'UniqueMgrCounts', 'Managers Over Time', 'mgrs.png')
+    ]
+
+    plots_latex = ""
+    for plot_file in plot_files:
+        plots_latex += f"\n\\newpage\n\\includegraphics[width=\\textwidth]{{{plot_file}}}"
+
+    full_latex = md_latex + "\n\\newpage\n" + table_latex + plots_latex
+
+    path = OUTPUT_DIR / output
+    with open(path, "w") as text_file:
+        text_file.write(full_latex)
+
+# Example usage
+#md_path = DATA_DIR / 'markdown_file.md'
+#output_file = 'combined_output.tex'
+#cleaned_df = clean_data.clean_data((STARTDATE, ENDDATE))
+#df_to_latex_with_md_and_plots(md_path, dataframe_variable, cleaned_df, output_file)
+
+
+
+
 def df_to_latex_with_notebook_and_plots(notebook_path, dfs, cleaned_df, output):
     """
     Combines the content of a Jupyter notebook, LaTeX table from DataFrame, and plots into a single .tex file
