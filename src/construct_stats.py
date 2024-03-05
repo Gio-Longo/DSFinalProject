@@ -6,7 +6,7 @@ and plots the data.
 Functions:
 - Pivot data into tables based on specific columns.
 - Create dataframes for the count of institutions, AUM by type, and unique manager name/number pairs.
-- Plot statistics over time.
+- Plot statistics over time!
 """
 
 import config
