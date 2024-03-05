@@ -10,8 +10,8 @@ Overall, it would be unfair to claim the replication process was entirely smooth
 ## Task List
 
 - Daniel
--   Created script to generate D1 Table statistics from cleaned dataset
--   Created script to pull all necessary data from wrds
+--   Created script to generate D1 Table statistics from cleaned dataset
+--   Created script to pull all necessary data from wrds
 - Dylan
 -   Setup dodo.py to automate pulling of data and generation of pdf report
 -   Created unit tests
