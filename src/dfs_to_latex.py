@@ -118,3 +118,12 @@ def df_to_latex_with_md_and_plots(dfs, md_path, output):
 #output_file = 'combined_output.tex'
 #dfs = [df1, df2, df3]  # Replace df1, df2, df3 with your actual DataFrame variables
 #df_to_latex_with_md_and_plots(dfs, md_path, output_file)
+
+def df_to_latex(dfs, output):
+  """
+  Calls LaTeX generation
+  """
+  doc_string = generate_latex_string(dfs)
+  path = OUTPUT_DIR / output
+  with open(path, "w") as text_file:
+      text_file.write(doc_string)
