@@ -4,10 +4,10 @@ Constructs the LaTeX report with the finished table.
 
 from pathlib import Path
 import config
-from clean_data import *
-from df_constructor import *
-from construct_stats import *
-from dfs_to_latex import *
+from clean_data import clean_data  
+from df_constructor import build_DFs 
+from construct_stats import construct_stats, plot_stats_data 
+from dfs_to_latex import df_to_latex_with_md_and_plots
 
 
 periods_old = [('1980-01-01','1984-12-31'),
