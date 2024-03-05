@@ -1,5 +1,5 @@
 """Run or update the project. This file uses the `doit` Python package. It works
-like a Makefile, but is Python-based
+like a Makefile, but is Python-based.
 """
 import sys
 sys.path.insert(1, './src/')
