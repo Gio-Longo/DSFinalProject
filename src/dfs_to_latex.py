@@ -5,6 +5,8 @@ Produces a LaTeX table from the completed dataframe.
 
 import config
 from pathlib import Path
+from nbconvert import LaTeXExporter
+import nbformat
 DATA_DIR = Path(config.DATA_DIR)
 OUTPUT_DIR = Path(config.OUTPUT_DIR)
 
@@ -54,6 +56,35 @@ def generate_latex_string(dfs):
 
   return start+body+end
 
+
+def notebook_to_latex(notebook_path):
+    """
+    Converts a notebook (.ipynb) to a LaTeX string
+    """
+    with open(notebook_path) as f:
+        nb = nbformat.read(f, as_version=4)
+
+    latex_exporter = LaTeXExporter()
+    latex_exporter.template_name = 'classic'
+
+    (body, resources) = latex_exporter.from_notebook_node(nb)
+    return body
+
+def df_to_latex_with_notebook(notebook_path, dfs, output):
+    """
+    Combines the content of a notebook and the LaTeX table from DataFrame,
+    then writes to a single .tex file
+    """
+    notebook_latex = notebook_to_latex(notebook_path)
+    table_latex = generate_latex_string(dfs)
+
+    full_latex = notebook_latex + "\n\\newpage\n" + table_latex
+
+    path = OUTPUT_DIR / output
+    with open(path, "w") as text_file:
+        text_file.write(full_latex)
+
+
 def df_to_latex(dfs, output):
   """
   Calls LaTeX generation
@@ -64,3 +95,6 @@ def df_to_latex(dfs, output):
       text_file.write(doc_string)
 
 
+#notebook_path = DATA_DIR / 'your_notebook_name.ipynb'
+#output_file = 'combined_output.tex'
+#df_to_latex_with_notebook(notebook_path, your_dataframe_variable, output_file)
