@@ -125,15 +125,10 @@ def plot_stats_data(stats_df, value_name, title, file_name, condense=False, path
         )
     )
     
-    plot.save(filename=file_name, path=str(path), dpi=300)
-    display(plot)
+    plot_path = path / file_name
+    plot.save(filename=plot_path, dpi=300)
+    #plot.save(filename=file_name, path=str(path), dpi=300)
+    #display(plot)
+    return plot_path
 
-
-if __name__ == '__main__':
-    cleaned_df = clean_data.clean_data((STARTDATE, ENDDATE))
-    type_counts_df, aum_df, mgrs_df = construct_stats(cleaned_df)
-
-    plot_stats_data(type_counts_df, 'Count', 'Institution Type Counts Over Time', 'type_counts.png')
-    plot_stats_data(aum_df, 'AUM', 'AUM Over Time', 'aum.png', True)
-    plot_stats_data(mgrs_df, 'UniqueMgrCounts', 'Managers Over Time', 'mgrs.png')
     
