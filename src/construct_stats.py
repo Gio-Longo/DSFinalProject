@@ -36,20 +36,6 @@ def pivot_table(table, col_val):
         values=col_val, 
     )
 
-
-def create_type_counts_df(cleaned_df):
-    """
-    Produces a DataFrame showing counts of unique 'typecode' values by 'fdate', 
-    ensuring that each 'mgrno' and 'mgrname' pair is counted only once per 'fdate'
-    """
-    inst_df = cleaned_df.copy()
-    inst_df = (inst_df.groupby('fdate', as_index=False)
-               .apply(lambda x: x.drop_duplicates(subset=['mgrno', 'mgrname'])).reset_index(drop=True))
-    type_counts = inst_df.groupby('fdate')['typecode'].value_counts().unstack()
-
-    return type_counts
-
-
 def create_aum_df(cleaned_df):
     """
     Generates a DataFrame summarizing the total AUM by 'typecode' and 'fdate', aggregating
@@ -76,6 +62,22 @@ def create_mgrs_df(cleaned_df):
     return pivot_table(unique_mgr_counts_by_type, 'UniqueMgrCounts')
 
 
+def create_avg_df(cleaned_df):
+    """
+    Generates a DataFrame summarizing the total AUM by 'typecode' and 'fdate', aggregating
+    AUM values for unique 'mgrno' and 'mgrname' combinations (since they are the same manager)
+    """
+    summed_aum_with_typecode = cleaned_df.groupby(['fdate', 'mgrno', 'mgrname']).agg({
+        'AUM': 'mean',
+        'typecode': 'first'  
+    }).reset_index()
+
+    summed_aum_with_typecode = summed_aum_with_typecode.sort_values(by=['fdate', 'mgrno', 'mgrname']).reset_index(drop=True)
+    aum_by_code_and_date = summed_aum_with_typecode.groupby(['fdate', 'typecode'])['AUM'].sum().reset_index()
+
+    return pivot_table(aum_by_code_and_date, 'AUM')
+
+
 def construct_stats(cleaned_df):
     '''
     Creates three data frames that contain useful plotting information. The three dataframes are the
@@ -85,17 +87,17 @@ def construct_stats(cleaned_df):
 
     cleaned_df['AUM'] = cleaned_df['prc'] * cleaned_df['shares']
 
-    type_counts_df = create_type_counts_df(cleaned_df).reset_index()
+    avg_df = create_avg_df(cleaned_df).reset_index()
     aum_df = create_aum_df(cleaned_df).reset_index()
     mgrs_df = create_mgrs_df(cleaned_df).reset_index()
 
     cols = ['fdate' ,'Bank', 'Insurance', 'Mutual Funds', 'Investment Advisors', 'Other']
 
-    type_counts_df.columns = cols
+    avg_df.columns = cols
     aum_df.columns = cols
     mgrs_df.columns = cols
 
-    stats = (type_counts_df, aum_df, mgrs_df)
+    stats = (avg_df, aum_df, mgrs_df)
 
     return stats
 
@@ -128,6 +130,8 @@ def plot_stats_data(stats_df, value_name, title, file_name, condense=False, path
     plot_path = path / file_name
     plot.save(filename=plot_path, dpi=300)
     #plot.save(filename=file_name, path=str(path), dpi=300)
+
+    # display should not be commented out because we use this function in the reader walkthrough to generate graphs
     display(plot)
     return plot_path
 
