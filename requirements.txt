@@ -17,7 +17,7 @@ jupyter==1.0.0
 jupyterlab==4.0.11
 jupyter-book==0.15.1
 matplotlib==3.8.1
-mizani==0.11.0
+mizani==0.9.3
 myst-parser==0.18.1
 notebook==7.0.6
 numpy==1.26.0
