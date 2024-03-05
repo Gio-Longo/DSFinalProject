@@ -11,7 +11,6 @@
 # This file may be used to create an environment using:
 # $ conda create --name <env> --file <this file>
 # platform: win-64
-display==8.22.2
 doit==0.36.0
 ipython==8.17.2
 jupyter==1.0.0
