@@ -1,6 +1,7 @@
 """
 Compiles the TeX file to PDF, in outputs
 """
+import sys
 from pdflatex import PDFLaTeX
 from pathlib import Path
 import config
@@ -35,5 +36,9 @@ def generate_pdf_from_tex(tex_file_name):
         os.chdir(current_dir)
 
 
-
-#generate_pdf_from_tex('full_report.tex')
+if __name__ == '__main__':
+    if len(sys.argv) > 1:
+        tex_file_name = sys.argv[1]
+        generate_pdf_from_tex(tex_file_name)
+    else:
+        print("Error: No .tex file name provided.")

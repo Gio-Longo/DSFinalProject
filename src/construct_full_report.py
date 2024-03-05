@@ -3,6 +3,7 @@ Constructs the LaTeX report with the finished table.
 """
 
 from pathlib import Path
+import logging
 import config
 from clean_data import clean_data  
 from df_constructor import build_DFs 
@@ -42,5 +43,7 @@ def construct_full_report():
 
     md_path = Path("../README.md")
 
-    df_to_latex_with_md_and_plots(df_old, df_new, ['aum.png', 'mgrs.png', 'avg_aum.png'], md_path, "full_report.tex")
+    df_to_latex_with_md_and_plots(df_old, df_new, ['type_counts.png', 'aum.png', 'mgrs.png'], md_path, "full_report.tex")
 
+if __name__ == '__main__':
+    construct_full_report()
