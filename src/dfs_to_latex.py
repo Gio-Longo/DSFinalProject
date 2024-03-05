@@ -7,6 +7,9 @@ import config
 from pathlib import Path
 from nbconvert import LaTeXExporter
 import nbformat
+from construct_stats import plot_stats_data, construct_stats
+
+
 DATA_DIR = Path(config.DATA_DIR)
 OUTPUT_DIR = Path(config.OUTPUT_DIR)
 
@@ -70,19 +73,37 @@ def notebook_to_latex(notebook_path):
     (body, resources) = latex_exporter.from_notebook_node(nb)
     return body
 
-def df_to_latex_with_notebook(notebook_path, dfs, output):
+
+def df_to_latex_with_notebook_and_plots(notebook_path, dfs, cleaned_df, output):
     """
-    Combines the content of a notebook and the LaTeX table from DataFrame,
-    then writes to a single .tex file
+    Combines the content of a Jupyter notebook, LaTeX table from DataFrame, and plots into a single .tex file
     """
     notebook_latex = notebook_to_latex(notebook_path)
+
     table_latex = generate_latex_string(dfs)
 
-    full_latex = notebook_latex + "\n\\newpage\n" + table_latex
+    type_counts_df, aum_df, mgrs_df = construct_stats(cleaned_df)
+    plot_files = [
+        plot_stats_data(type_counts_df, 'Count', 'Institution Type Counts Over Time', 'type_counts.png'),
+        plot_stats_data(aum_df, 'AUM', 'AUM Over Time', 'aum.png', True),
+        plot_stats_data(mgrs_df, 'UniqueMgrCounts', 'Managers Over Time', 'mgrs.png')
+    ]
+
+    plots_latex = ""
+    for plot_file in plot_files:
+        plots_latex += f"\n\\newpage\n\\includegraphics[width=\\textwidth]{{{plot_file}}}"
+
+    full_latex = notebook_latex + "\n\\newpage\n" + table_latex + plots_latex
 
     path = OUTPUT_DIR / output
     with open(path, "w") as text_file:
         text_file.write(full_latex)
+
+#notebook_path = DATA_DIR / 'notebook_name.ipynb'
+#output_file = 'combined_output.tex'
+#cleaned_df = clean_data.clean_data((STARTDATE, ENDDATE))
+#df_to_latex_with_notebook_and_plots(notebook_path, your_dataframe_variable, cleaned_df, output_file)
+
 
 
 def df_to_latex(dfs, output):
