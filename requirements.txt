@@ -36,6 +36,7 @@ python-dateutil==2.9.0
 python-decouple==3.8
 python-dotenv==1.0.0
 pyxlsb==1.0.10
+requests==2.31.0
 seaborn==0.13.0
 sphinx-book-theme==1.0.1
 wrds==3.1.6
