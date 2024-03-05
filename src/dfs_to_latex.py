@@ -5,6 +5,8 @@ Produces a .tex file including write-up, tables, and graphs
 
 import config
 from pathlib import Path
+from construct_stats import plot_stats_data, construct_stats
+
 DATA_DIR = Path(config.DATA_DIR)
 OUTPUT_DIR = Path(config.OUTPUT_DIR)
 
@@ -12,11 +14,7 @@ def generate_latex_string(dfs):
   """
   Inserts the dataframe data into the preconstructed LaTeX table layout
   """
-  start = r"""\documentclass{article}
-    \usepackage{caption}
-    \usepackage[top=0.75in, left=1in,right=1in]{geometry}
-    \begin{document}
-    \begin{table}
+  start = r"""\begin{table}
     \caption*{Table D1\\
     Summary of 13F Institutions by Type}
     \begin{tabular}{ccccccccccc}
@@ -31,8 +29,7 @@ def generate_latex_string(dfs):
   end = r"""
     \hline
     \end{tabular}
-    \end{table}
-    \end{document}"""
+    \end{table}"""
 
   type_dict = {
   1.0: 'A. Banks',
@@ -54,13 +51,46 @@ def generate_latex_string(dfs):
 
   return start+body+end
 
-def df_to_latex(dfs, output):
-  """
-  Calls LaTeX generation
-  """
-  doc_string = generate_latex_string(dfs)
-  path = OUTPUT_DIR / output
-  with open(path, "w") as text_file:
-      text_file.write(doc_string)
+def markdown_to_latex(md_path):
+    """
+    Reads a Markdown file and converts it to LaTeX format with specific replacements for our document
+    """
+    with open(md_path, 'r') as file:
+        md_content = file.read()
+    md_content = md_content.replace('# ', '\\section*{').replace('\n', '}\n')
+    md_content = md_content.replace('## ', '\\subsection*{').replace('\n', '}\n')
+    md_content = md_content.replace('===========================================================================\n',
+                                    '\\noindent\\makebox[\\linewidth]{\\rule{\\paperwidth}{0.4pt}}\n')
+    return md_content
 
+def df_to_latex_with_md_and_plots(df_old, df_new, plot_files, md_path, output):
+    """
+    Combines the content of a Markdown file, LaTeX tables from multiple DataFrames, and plots into a single .tex file
+    """
+    start = r"""\documentclass{article}
+    \usepackage{caption}
+    \usepackage[top=0.75in, left=1in,right=1in]{geometry}
+    \usepackage{graphicx}
+    \begin{document}"""
+    
+    md_latex = markdown_to_latex(md_path)
+    full_latex = start + "\n" + md_latex + "\n\\newpage\n"
+    
+    for df in [df_old, df_new]:
+        table_body = generate_latex_string(df)
+        full_latex += table_body + "\n\\newpage\n"
+        
+        for plot_file in plot_files:
+            full_latex += f"\\includegraphics[width=\\textwidth]{{{plot_file}}}\n\\newpage\n"
 
+    end = r"\end{document}"
+    full_latex += end
+    
+    path = OUTPUT_DIR / output
+    with open(path, "w") as text_file:
+        text_file.write(full_latex)
+
+# md_path = 'path.md' 
+# output_file = 'full_report.tex'
+# dfs = [df1, df2, df3] etc
+# df_to_latex_with_md_and_plots(dfs, md_path, output_file)
