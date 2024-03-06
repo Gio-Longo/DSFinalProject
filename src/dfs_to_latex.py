@@ -37,7 +37,7 @@ def generate_latex_string(dfs):
     3.0: 'C. Investment advisors',
     4.0: 'D. Mutual funds',
     5.0: 'E. Pension funds',
-    6.0: 'E. Other'}
+    6.0: 'F. Other'}
 
     body = ""
     for type_index, type_value in type_dict.items():
