@@ -88,8 +88,6 @@ def build_DFs(df, periods):
         managers_sub['id'] = managers_sub['mgrno'].astype(str) + "-" + managers_sub['mgrname'].astype(str)
 
         by_type = managers_sub.groupby('type').agg(
-        number=('id', 'nunique'),
-        type_AUM=('AUM', 'sum'),
         AUM_median=('AUM', 'median'),
         AUM_90=('AUM', lambda x: np.percentile(x, 90)),
         stocks_median=('stocks', 'median'),
@@ -97,7 +95,14 @@ def build_DFs(df, periods):
         universe_median=('universe', 'median'),
         universe_90=('universe', lambda x: np.percentile(x, 90)))
 
-        by_type['market_held'] = np.round(by_type['type_AUM'] /market_sub['market_val'].sum()*100).astype(int)
+        by_type_quarter = managers_sub.groupby(['type', 'Qtr']).agg(
+                number=('id', 'nunique'),
+                AUM=('AUM', 'sum')
+            ).reset_index()
+        
+        by_type['number'] = np.round(by_type_quarter.groupby('type')['number'].mean()).astype(int)
+        by_type['market_held'] = np.round((by_type_quarter['AUM']/market_sub['market_val']*100).mean()).astype(int)
+
         by_type['AUM_median'] = np.round(by_type['AUM_median'] /1000000).astype(int)
         by_type['AUM_90'] = np.round(by_type['AUM_90'] /1000000).astype(int)
         by_type['stocks_median'] = np.round(by_type['stocks_median']).astype(int)
@@ -105,7 +110,6 @@ def build_DFs(df, periods):
         by_type['universe_median'] = np.round(by_type['universe_median']).astype(int)  
         by_type['universe_90'] = np.round(by_type['universe_90']).astype(int)  
 
-        by_type = by_type.drop('type_AUM', axis=1)
         df_list[period] = by_type
 
     return df_list

@@ -54,9 +54,9 @@ def pull_mf_mapping(wrds_username=WRDS_USERNAME, start_date = '03/31/1980', end_
     my_params = {'start_date':start_date, 'end_date': end_date}
 
     sql_query = """
-        SELECT a.fdate, a.mgrco
+        SELECT a.fdate, a.mgrcocd
         FROM 
-            tr_mutualfunds.s12type7 AS a
+            tr_mutualfunds.S12TYPE5 AS a
         WHERE 
             a.fdate BETWEEN %(start_date)s AND %(end_date)s
         """
