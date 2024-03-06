@@ -82,10 +82,10 @@ def test_typecodes_filtered_correctly():
     allowed_typecodes = [1, 2, 3, 4, 5, 6]
     assert df_cleaned['typecode'].isin(allowed_typecodes).all(), "Typecodes not filtered correctly"
 
-def test_clean_data_num_rows():
-    """
-    Checks the number of rows in the cleaned data
-    """
-    df_cleaned = clean_data(test_period, data_dir)
-    assert df_cleaned.shape[0] == #Enter correct number of rows#
- 
+
+#def test_clean_data_num_rows():
+#    """
+#    Checks the number of rows in the cleaned data
+#    """
+#    df_cleaned = clean_data(test_period, data_dir)
+#    assert df_cleaned.shape[0] == #Enter correct number of rows#
