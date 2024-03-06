@@ -29,8 +29,8 @@ Overall, it would be unfair to claim the replication process was entirely smooth
 
 ### Nick
 
-- Created script to clean dataset as specified in the paper
-- Created script to compile all tables and visuals into the singular `.tex` report, convert `.tex` to PDF
+- Created script to clean dataset as specified in the paper, recode dodo.py
+- Created script to compile all tables, text, and visuals into the singular `.tex` report
 
 ### Sarp
 
