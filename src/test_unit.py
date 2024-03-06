@@ -63,7 +63,7 @@ def test_clean_data_types():
     """
     df_cleaned = clean_data(test_period, data_dir)
     expected_dtypes = {
-        'fdate': 'datetime64[us]',
+        'fdate': '<M8[us]',
         'mgrno': 'float64',
         'mgrname': 'object',
         'typecode': 'float64',
