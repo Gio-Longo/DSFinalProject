@@ -17,6 +17,7 @@ def generate_latex_string(dfs):
     start = r"""\begin{table}
         \caption*{Table D1\\
         Summary of 13F Institutions by Type}
+        \resizebox{\textwidth}{!}{
         \begin{tabular}{ccccccccccc}
             \hline
             &    &    & \multicolumn{2}{c}{Assets under} &  & \multicolumn{2}{c}{}  &  & \multicolumn{2}{c}{Number of stocks}\\
@@ -28,7 +29,7 @@ def generate_latex_string(dfs):
             \hline"""
     end = r"""
         \hline
-        \end{tabular}
+        \end{tabular}}
         \end{table}"""
 
     type_dict = {
