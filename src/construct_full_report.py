@@ -39,7 +39,7 @@ def construct_full_report():
     avg_df, aum_df, mgrs_df = construct_stats(df_old)
     plot_stats_data(aum_df, 'AUM', 'AUM Over Time', 'aum.png', True),
     plot_stats_data(mgrs_df, 'UniqueMgrCounts', 'Managers Over Time', 'mgrs.png')
-    plot_stats_data(avg_df, 'AUM', 'Average AUM Over Time', 'avg_aum.png'),
+    plot_stats_data(avg_df, 'Average AUM', 'Average AUM Over Time', 'avg_aum.png'),
 
     md_path = Path(config.BASE_DIR/ "README.md")
 
