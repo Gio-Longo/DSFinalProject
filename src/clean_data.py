@@ -41,7 +41,7 @@ def clean_data(period = (STARTDATE, ENDDATE), data_dir = DATA_DIR):
     df['pf'] = df['mgrname'].isin(df_pf['PF_name'])
 
     last_type_before_dec98 = df[df['fdate'] < '1998-12-01'].groupby(['mgrno', 'mgrname'])['typecode'].last().rename('typecode_correct')
-    df = df.merge(last_type_before_dec98, on=['mgrno', 'mgrname'], how='left')
+    df = df[df['fdate'] >= start].merge(last_type_before_dec98, on=['mgrno', 'mgrname'], how='left')
     df.loc[df['fdate'] >= '1998-12-01', 'typecode'] = df['typecode_correct'].fillna(df['typecode'])
 
     most_recent_type_code = df.groupby(['mgrno', 'mgrname'])['typecode'].last().rename('typecode_recent')
@@ -56,6 +56,5 @@ def clean_data(period = (STARTDATE, ENDDATE), data_dir = DATA_DIR):
     df.loc[df.groupby(['mgrno', 'mgrname'])['pf'].transform('any') & df['typecode'].isin([3,4,5]), 'new_typecode'] = 5
     df['new_typecode'] = df['new_typecode'].fillna(6)
     df['typecode'] = df['new_typecode']
-
-    df = df[df['fdate'] >= start]
+    
     return df[['fdate', 'mgrno', 'mgrname', 'typecode', 'cusip', 'shares', 'prc', 'shrout1']]
