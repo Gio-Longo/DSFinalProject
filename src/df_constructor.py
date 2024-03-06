@@ -85,8 +85,10 @@ def build_DFs(df, periods):
         managers_sub = managers[managers['Qtr'].between(start, end)]
         market_sub = market[market['Qtr'].between(start, end)]
 
+        managers_sub['id'] = managers_sub['mgrno'].astype(str) + "-" + managers_sub['mgrname'].astype(str)
+
         by_type = managers_sub.groupby('type').agg(
-        number=('mgrno', 'nunique'),
+        number=('id', 'nunique'),
         type_AUM=('AUM', 'sum'),
         AUM_median=('AUM', 'median'),
         AUM_90=('AUM', lambda x: np.percentile(x, 90)),
