@@ -36,7 +36,6 @@ def generate_latex_string(dfs):
   2.0: 'B. Insurance companies',
   3.0: 'C. Investment advisors',
   4.0: 'D. Mutual funds',
-  5.0: 'E. Pension funds',
   6.0: 'E. Other'}
 
   body = ""
