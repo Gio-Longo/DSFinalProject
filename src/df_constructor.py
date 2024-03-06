@@ -99,9 +99,11 @@ def build_DFs(df, periods):
                 number=('id', 'nunique'),
                 AUM=('AUM', 'sum')
             ).reset_index()
+        by_type_quarter = by_type_quarter.merge(market_sub, on='Qtr', how='left')
+        by_type_quarter['held'] = by_type_quarter['AUM']/by_type_quarter['market_val']*100
         
         by_type['number'] = np.round(by_type_quarter.groupby('type')['number'].mean()).astype(int)
-        by_type['market_held'] = np.round((by_type_quarter['AUM']/market_sub['market_val']*100).mean()).astype(int)
+        by_type['market_held'] = np.round(by_type_quarter.groupby('type')['held'].mean()).astype(int)
 
         by_type['AUM_median'] = np.round(by_type['AUM_median'] /1000000).astype(int)
         by_type['AUM_90'] = np.round(by_type['AUM_90'] /1000000).astype(int)
