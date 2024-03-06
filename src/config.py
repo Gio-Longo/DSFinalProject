@@ -34,11 +34,5 @@ ENDDATE_NEW = '2024-12-31'
 
 if __name__ == "__main__":
     
-    ## If they don't exist, create the data and output directories
     (DATA_DIR / 'pulled').mkdir(parents=True, exist_ok=True)
-
-    # Sometimes, I'll create other folders to organize the data
-    # (DATA_DIR / 'intermediate').mkdir(parents=True, exist_ok=True)
-    # (DATA_DIR / 'derived').mkdir(parents=True, exist_ok=True)
-
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)

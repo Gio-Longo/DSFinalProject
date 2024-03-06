@@ -51,17 +51,77 @@ def generate_latex_string(dfs):
 
   return start+body+end
 
+
 def markdown_to_latex(md_path):
     """
-    Reads a Markdown file and converts it to LaTeX format with specific replacements for our document
+    Reads a Markdown file and converts it to LaTeX format.
+    - Bullet points are converted to LaTeX itemize lists.
+    - Markdown italics to LaTeX italics.
+    - '---' to LaTeX horizontal line replacement.
+    - Ensures text paragraphs are separated and headers are properly formatted.
     """
     with open(md_path, 'r') as file:
-        md_content = file.read()
-    md_content = md_content.replace('# ', '\\section*{').replace('\n', '}\n')
-    md_content = md_content.replace('## ', '\\subsection*{').replace('\n', '}\n')
-    md_content = md_content.replace('===========================================================================\n',
-                                    '\\noindent\\makebox[\\linewidth]{\\rule{\\paperwidth}{0.4pt}}\n')
-    return md_content
+        md_lines = file.readlines()
+
+    latex_lines = []
+    in_itemize = False  
+
+    for line in md_lines:
+        if line.startswith('# '):
+            _close_itemize_if_needed(latex_lines, in_itemize)
+            in_itemize = False
+            latex_lines.append('\\section*{' + _convert_italics(line[2:]) + '}')
+
+        elif line.startswith('## '):
+            _close_itemize_if_needed(latex_lines, in_itemize)
+            in_itemize = False
+            latex_lines.append('\\subsection*{' + _convert_italics(line[3:]) + '}')
+
+        elif line.startswith('### '):
+            _close_itemize_if_needed(latex_lines, in_itemize)
+            in_itemize = False
+            latex_lines.append('\\subsubsection*{' + _convert_italics(line[4:]) + '}')
+
+        elif line.startswith('- '):
+            if not in_itemize:
+                latex_lines.append('\\begin{itemize}')
+                in_itemize = True
+            latex_lines.append('    \\item ' + _convert_italics(line[2:]))
+
+        elif '---' in line:
+            _close_itemize_if_needed(latex_lines, in_itemize)
+            in_itemize = False
+            latex_lines.append('\\noindent\\rule{\\linewidth}{0.4pt}')
+
+        elif line.strip():  
+            if in_itemize:
+                latex_lines.append('\\end{itemize}')
+                in_itemize = False
+            latex_lines.append(_convert_italics(line) + '\n')
+
+        else:  
+            _close_itemize_if_needed(latex_lines, in_itemize)
+            in_itemize = False
+            latex_lines.append('')  
+
+    _close_itemize_if_needed(latex_lines, in_itemize)
+
+    return '\n'.join(latex_lines)
+
+def _convert_italics(text):
+    """
+    Convert Markdown italics to LaTeX italics.
+    """
+    import re
+    return re.sub(r'(\*|_)(.*?)\1', r'\\textit{\2}', text)
+
+def _close_itemize_if_needed(latex_lines, in_itemize):
+    """
+    Close an open itemize environment if needed.
+    """
+    if in_itemize:
+        latex_lines.append('\\end{itemize}\n')
+
 
 def df_to_latex_with_md_and_plots(df_old, df_new, plot_files, md_path, output):
     """
