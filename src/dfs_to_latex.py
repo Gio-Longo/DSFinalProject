@@ -140,7 +140,7 @@ def df_to_latex_with_md_and_plots(df_old, df_new, plot_files, md_path, output):
     
     for df in [df_old, df_new]:
         table_body = generate_latex_string(df)
-        full_latex += table_body + "\n\\newpage\n"
+        full_latex += table_body + "\n\\clearpage\n"
         
     graph_headlines = [
         "Figure 1. Average AUM over Time",
