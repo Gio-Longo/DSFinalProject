@@ -18,7 +18,7 @@ def generate_latex_string(dfs):
         \caption*{Table D1\\
         Summary of 13F Institutions by Type}
         \centering
-        \resizebox{0.95\textwidth}{!}{
+        \resizebox{0.90\textwidth}{!}{
         \begin{tabular}{ccccccccccc}
             \hline
             &    &    & \multicolumn{2}{c}{Assets under} &  & \multicolumn{2}{c}{}  &  & \multicolumn{2}{c}{Number of stocks}\\
@@ -125,19 +125,38 @@ def _close_itemize_if_needed(latex_lines, in_itemize):
     """
     if in_itemize:
         latex_lines.append('\\end{itemize}\n')
+        
+def gen_bib():
+    bib_entry = """
+    @article{koijen2019demand,
+    title={A demand system approach to asset pricing},
+    author={Koijen, Ralph SJ and Yogo, Motohiro},
+    journal={Journal of Political Economy},
+    volume={127},
+    number={4},
+    pages={1475--1515},
+    year={2019},
+    publisher={The University of Chicago Press Chicago, IL}
+    }
+    """
 
+    with open(OUTPUT_DIR / "paper.bib", "w") as file:
+        file.write(bib_entry)
 
 def df_to_latex_with_md_and_plots(df_old, df_new, plot_files, md_path, output):
     """
     Combines the content of a Markdown file, LaTeX tables from multiple DataFrames, and plots into a single .tex file
     """
+
+    gen_bib()
+
     start = r"""\documentclass{article}
     \usepackage{caption}
     \usepackage[top=0.75in, left=1in,right=1in]{geometry}
     \usepackage{graphicx}
     \begin{document}"""
     
-    md_latex = markdown_to_latex(md_path)
+    md_latex = markdown_to_latex(md_path).replace(r"Asset Pricing}", r"Asset Pricing}\cite{koijen2019demand}")
     full_latex = start + "\n" + md_latex + "\n\\newpage\n"
     
     for df in [df_old, df_new]:
@@ -156,13 +175,13 @@ def df_to_latex_with_md_and_plots(df_old, df_new, plot_files, md_path, output):
         "The number of unique managers varies drastically by institution type. We see a lot more managers involved with Banks to start, but this number decreases rapidly (similarly with Insurance). The other three investment types see the opposite trend, starting with less managers and increasing over time."
     ]
     
-    for i, (plot_file, captions) in enumerate(zip(plot_files,graph_captions)):
+    for i, plot_file in enumerate(plot_files):
         full_latex += f"""\\section*{{{graph_headlines[i]}}}\n"""
-        full_latex += r"\begin{figure}\n\centering\n"
-        full_latex += f"""\\includegraphics[width=\\textwidth]{{{plot_file}}}\n\\newpage\n"""
-        full_latex += r"\c" + f"""aption{captions}\n""" + r"\end{figure}"
+        full_latex += r"\begin{figure}[h]\centering"
+        full_latex += f"""\\includegraphics[width=\\textwidth]{{{plot_file}}}\n"""
+        full_latex += r"\c" + f"""aption{{{graph_captions[i]}}}\n""" + r"\end{figure}\\newpage\n"
 
-    end = r"\end{document}"
+    end = r"\bibliographystyle{plain}\bibliography{paper.bib}\end{document}"
     full_latex += end
     
     path = OUTPUT_DIR / output
