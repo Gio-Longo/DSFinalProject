@@ -12,18 +12,33 @@ from doit.tools import run_once, create_folder
 DATA_DIR = Path(config.DATA_DIR)
 OUTPUT_DIR = Path(config.OUTPUT_DIR)
 
-def task_pull_wrds():
-    """Pull data from WRDS if it doesn't already exist.
+def task_pull_13f():
+    """Pull 13f data from WRDS if it doesn't already exist.
     Outputs:
-        Two parquets: 13f and Mutual_Fund in DATA_DIR
+        parquets: 13f in DATA_DIR
     """
     def check_files():
-        return (DATA_DIR / "pulled" / "13f.parquet").exists() and \
-               (DATA_DIR / "pulled" / "Mutual_Fund.parquet").exists()
+        return (DATA_DIR / "pulled" / "13f.parquet").exists()
 
     return {
-        'actions': ['python src/pull_wrds.py'],
-        'targets': [DATA_DIR / "pulled" / "13f.parquet", DATA_DIR / "pulled" / "Mutual_Fund.parquet"],
+        'actions': ['python src/pull_13f.py'],
+        'targets': [DATA_DIR / "pulled" / "13f.parquet"],
+        'uptodate': [check_files],
+        'clean': True,
+        'task_dep': ['create_folders'],
+    }
+
+def task_pull_mf():
+    """Pull mutual fund data from WRDS if it doesn't already exist.
+    Outputs:
+        parquets: Mutual_Fund in DATA_DIR
+    """
+    def check_files():
+        return (DATA_DIR / "pulled" / "Mutual_Fund.parquet").exists()
+
+    return {
+        'actions': ['python src/pull_mf.py'],
+        'targets': [DATA_DIR / "pulled" / "Mutual_Fund.parquet"],
         'uptodate': [check_files],
         'clean': True,
         'task_dep': ['create_folders'],
@@ -50,7 +65,7 @@ def task_construct_full_report():
         'actions': ['python src/construct_full_report.py'],
         'file_dep': [DATA_DIR / "pulled" / "13f.parquet", DATA_DIR / "pulled" / "Mutual_Fund.parquet"],
         'targets': [Path(config.OUTPUT_DIR) / "full_report.tex"],
-        'task_dep': ['pull_wrds'],  # This task depends on `task_pull_wrds`
+        'task_dep': ['pull_13f', 'pull_mf'],  # This task depends on `task_pull_13f and task_pull_mf`
         'clean': True,
     }
 
