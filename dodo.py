@@ -13,7 +13,10 @@ DATA_DIR = Path(config.DATA_DIR)
 OUTPUT_DIR = Path(config.OUTPUT_DIR)
 
 def task_pull_wrds():
-    """Pull data from WRDS if it doesn't already exist."""
+    """Pull data from WRDS if it doesn't already exist.
+    Outputs:
+        Two parquets: 13f and Mutual_Fund in DATA_DIR
+    """
     def check_files():
         return (DATA_DIR / "pulled" / "13f.parquet").exists() and \
                (DATA_DIR / "pulled" / "Mutual_Fund.parquet").exists()
@@ -27,7 +30,10 @@ def task_pull_wrds():
     }
 
 def task_create_folders():
-    """Create necessary folders."""
+    """Create necessary folders.
+    Outputs:
+        Create folder for pulled dat
+    """
     return {
         'actions': [(create_folder, [DATA_DIR / 'pulled'])],
         'targets': [DATA_DIR / 'pulled'],
@@ -36,7 +42,10 @@ def task_create_folders():
     }
 
 def task_construct_full_report():
-    """Construct the full LaTeX report after ensuring WRDS data is available."""
+    """Construct the full LaTeX report after ensuring WRDS data is available.
+    Outputs:
+        LaTex Report in Output DIR
+    """
     return {
         'actions': ['python src/construct_full_report.py'],
         'file_dep': [DATA_DIR / "pulled" / "13f.parquet", DATA_DIR / "pulled" / "Mutual_Fund.parquet"],
@@ -46,7 +55,10 @@ def task_construct_full_report():
     }
 
 def task_compile_latex_docs():
-    """Compile the LaTeX documents to PDFs"""
+    """Compile the LaTex documents to PDFs
+    Outputs:
+        PDFs in Reports
+    """
     file_dep = [
         "./output/full_report.tex",
     ]
