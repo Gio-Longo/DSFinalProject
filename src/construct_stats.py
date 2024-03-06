@@ -85,7 +85,7 @@ def construct_stats(cleaned_df):
 
     cleaned_df['AUM'] = cleaned_df['prc'] * cleaned_df['shares']
 
-    type_counts_df = create_type_counts_df(cleaned_df).reset_index()
+    type_counts_df = create_avg_aum_df(cleaned_df).reset_index()
     aum_df = create_aum_df(cleaned_df).reset_index()
     mgrs_df = create_mgrs_df(cleaned_df).reset_index()
 
