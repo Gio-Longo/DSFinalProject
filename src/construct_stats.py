@@ -79,7 +79,7 @@ def create_mgrs_df(cleaned_df):
 def construct_stats(cleaned_df):
     '''
     Creates three data frames that contain useful plotting information. The three dataframes are the
-    total number of institutions at each quarter, the total AUM by institution type per quarter, and
+    average AUM held at each quarter, the total AUM by institution type per quarter, and
     the number of unique manager name/number pairs per quarter.
     '''
 
