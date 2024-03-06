@@ -100,7 +100,7 @@ def construct_stats(cleaned_df):
     return stats
 
 
-def plot_stats_data(stats_df, value_name, title, file_name, condense=False, path = plot_path):
+def plot_stats_data(stats_df, value_name, title, file_name, condense=False):
     """
     Plots institution counts over time
     """
