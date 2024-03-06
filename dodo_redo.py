@@ -45,11 +45,19 @@ def task_construct_full_report():
         'clean': True,
     }
 
-def task_tex_to_pdf():
-    """Compile the TeX file to PDF using the tex_to_pdf.py script."""
+def task_compile_latex_docs():
+    """Compile the LaTeX documents to PDFs"""
+    file_dep = [
+        "./output/full_report.tex",
+    ]
+    targets = ["./reports/full_report.pdf",]
+
     return {
-        'actions': ['python src/tex_to_pdf.py full_report.tex'], 
-        'file_dep': [OUTPUT_DIR / 'full_report.tex'], 
-        'targets': [OUTPUT_DIR / 'full_report.pdf'], 
-        'clean': True,
+        "actions": [
+            "latexmk -xelatex -cd -outdir=../reports ./output/full_report.tex",  # Compile
+            "latexmk -xelatex -c -cd -outdir=../reports ./output/full_report.tex",  # Clean
+        ],
+        "targets": targets,
+        "file_dep": file_dep,
+        "clean": True,
     }
