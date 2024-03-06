@@ -34,17 +34,20 @@ def pivot_table(table, col_val):
     )
 
 
-def create_type_counts_df(cleaned_df):
+def create_avg_aum_df(cleaned_df):
     """
-    Produces a DataFrame showing counts of unique 'typecode' values by 'fdate', 
-    ensuring that each 'mgrno' and 'mgrname' pair is counted only once per 'fdate'
+    Generates a DataFrame summarizing the total AUM by 'typecode' and 'fdate', aggregating
+    AUM values for unique 'mgrno' and 'mgrname' combinations (since they are the same manager)
     """
-    inst_df = cleaned_df.copy()
-    inst_df = (inst_df.groupby('fdate', as_index=False)
-               .apply(lambda x: x.drop_duplicates(subset=['mgrno', 'mgrname'])).reset_index(drop=True))
-    type_counts = inst_df.groupby('fdate')['typecode'].value_counts().unstack()
+    summed_aum_with_typecode = cleaned_df.groupby(['fdate', 'mgrno', 'mgrname']).agg({
+        'AUM': 'mean',
+        'typecode': 'first'  
+    }).reset_index()
 
-    return type_counts
+    summed_aum_with_typecode = summed_aum_with_typecode.sort_values(by=['fdate', 'mgrno', 'mgrname']).reset_index(drop=True)
+    aum_by_code_and_date = summed_aum_with_typecode.groupby(['fdate', 'typecode'])['AUM'].sum().reset_index()
+
+    return pivot_table(aum_by_code_and_date, 'AUM')
 
 
 def create_aum_df(cleaned_df):
