@@ -41,7 +41,7 @@ def construct_full_report():
     plot_stats_data(mgrs_df, 'UniqueMgrCounts', 'Managers Over Time', 'mgrs.png')
     plot_stats_data(avg_df, 'AUM', 'Average AUM Over Time', 'avg_aum.png'),
 
-    md_path = Path("../README.md")
+    md_path = Path(config.BASE_DIR/ "README.md")
 
     df_to_latex_with_md_and_plots(dfs_old, dfs_new, ['type_counts.png', 'aum.png', 'mgrs.png'], md_path, "full_report.tex")
 
