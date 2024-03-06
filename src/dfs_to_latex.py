@@ -179,7 +179,7 @@ def df_to_latex_with_md_and_plots(df_old, df_new, plot_files, md_path, output):
         full_latex += f"""\\section*{{{graph_headlines[i]}}}\n"""
         full_latex += r"\begin{figure}[h]\centering"
         full_latex += f"""\\includegraphics[width=\\textwidth]{{{plot_file}}}\n"""
-        full_latex += r"\c" + f"""aption{{{graph_captions[i]}}}\n""" + r"\end{figure}\\newpage\n"
+        full_latex += r"\c" + f"""aption{{{graph_captions[i]}}}\n""" + r"\end{figure}\newpage"
 
     end = r"\bibliographystyle{plain}\bibliography{paper.bib}\end{document}"
     full_latex += end
