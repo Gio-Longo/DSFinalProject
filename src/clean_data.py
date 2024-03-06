@@ -46,11 +46,6 @@ def clean_data(period = (STARTDATE, ENDDATE), data_dir = DATA_DIR):
     df['new_typecode'] = np.nan
     df.loc[df['typecode'] == 1, 'new_typecode'] = 1
     df.loc[df['typecode'] == 2, 'new_typecode'] = 2
-    df.loc[df['typecode'].isin([3,4]), 'new_typecode'] = 3
-    df.loc[df['mf'], 'new_typecode'] = 4
-    df.loc[df.groupby(['mgrno', 'mgrname'])['pf'].transform('any') & df['typecode'].isin([3,4,5]), 'new_typecode'] = 5
-    df['new_typecode'] = df['new_typecode'].fillna(6)
-    df['typecode'] = df['new_typecode']
 
     df_mf = pd.read_parquet(data_dir / "pulled/Mutual_Fund.parquet")
     df_mf = df_mf[df_mf['fdate'] <= end].drop_duplicates()
@@ -59,7 +54,14 @@ def clean_data(period = (STARTDATE, ENDDATE), data_dir = DATA_DIR):
     df['mf'] = df['_merge'] == 'both'
     df = df.drop(columns=['_merge', 'fdate_temp', 'mgrcocd', 'fdate_y']).rename(columns={'fdate_x': 'fdate'})
 
+    df.loc[df['mf'], 'new_typecode'] = 4
+    df.loc[df['typecode'].isin([3,4]), 'new_typecode'] = 3
+
     df_pf = pd.read_csv(data_dir / "manual/PF_names.csv")
     df['pf'] = df['mgrname'].isin(df_pf['PF_name'])
+
+    df.loc[df.groupby(['mgrno', 'mgrname'])['pf'].transform('any') & df['typecode'].isin([3,4,5]), 'new_typecode'] = 5
+    df['new_typecode'] = df['new_typecode'].fillna(6)
+    df['typecode'] = df['new_typecode']
     
     return df[['fdate', 'mgrno', 'mgrname', 'typecode', 'cusip', 'shares', 'prc', 'shrout1']]
