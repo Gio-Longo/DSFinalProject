@@ -3,10 +3,14 @@ import re
 import pandas as pd
 from pathlib import Path
 from clean_data import clean_data  
+import config
 
-tex_file_path = os.path.join(os.path.dirname(__file__), '..', 'output', 'full_report.tex')
-data_dir = Path(os.path.join(os.path.dirname(__file__), '..', 'data', 'pulled'))
-mock_period = ('2000-01-01', '2002-12-31')
+#tex_file_path = os.path.join(os.path.dirname(__file__), '..', 'output', 'full_report.tex')
+tex_file_path = config.OUTPUT_DIR / 'full_report.tex'
+#data_dir = Path(os.path.join(os.path.dirname(__file__), '..', 'data', 'pulled'))
+data_dir = config.DATA_DIR / 'pulled'
+
+test_period = config.UNITTEST_PERIOD
 
 # Tests for .tex file
 def test_tex_file_exists():
@@ -34,12 +38,12 @@ def test_investment_advisors_data_present():
         assert len(investment_advisors_section[0].strip().split('\n')) > 2, "Investment advisors section is unexpectedly empty"
 
 def test_clean_data_no_nulls():
-    df_cleaned = clean_data(mock_period, data_dir)
+    df_cleaned = clean_data(test_period, data_dir)
     assert not df_cleaned['prc'].isnull().any(), "'prc' column contains null values"
     assert not df_cleaned['shrout1'].isnull().any(), "'shrout1' column contains null values"
 
 def test_clean_data_types():
-    df_cleaned = clean_data(mock_period, data_dir)
+    df_cleaned = clean_data(test_period, data_dir)
     expected_dtypes = {
         'fdate': 'datetime64[ns]',
         'mgrno': 'object',
@@ -55,6 +59,6 @@ def test_clean_data_types():
         assert df_cleaned[column].dtype == expected_dtype, f"Column '{column}' does not have expected dtype '{expected_dtype}'"
 
 def test_typecodes_filtered_correctly():
-    df_cleaned = clean_data(mock_period, data_dir)
+    df_cleaned = clean_data(test_period, data_dir)
     allowed_typecodes = [1, 2, 3, 4, 5, 6]
     assert df_cleaned['typecode'].isin(allowed_typecodes).all(), "Typecodes not filtered correctly"

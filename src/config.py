@@ -32,6 +32,8 @@ ENDDATE_OLD = '2017-12-31'
 STARTDATE_NEW = '2018-01-01'
 ENDDATE_NEW = '2024-12-31'
 
+UNITTEST_PERIOD = ('2000-01-01', '2002-12-31')
+
 if __name__ == "__main__":
     
     (DATA_DIR / 'pulled').mkdir(parents=True, exist_ok=True)
