@@ -110,7 +110,7 @@ def build_DFs(df, periods):
             universe_median=('universe_median', 'mean'),
             universe_90=('universe_90', 'mean'),
             market_held=('market_held', 'mean')
-            ).reset_index()
+            )
         
         by_type['number'] = np.round(by_type['number']).astype(int)
         by_type['market_held'] = np.round(by_type['market_held']).astype(int)
