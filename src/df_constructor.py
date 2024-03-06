@@ -87,24 +87,33 @@ def build_DFs(df, periods):
 
         managers_sub['id'] = managers_sub['mgrno'].astype(str) + "-" + managers_sub['mgrname'].astype(str)
 
-        by_type = managers_sub.groupby('type').agg(
-        AUM_median=('AUM', 'median'),
-        AUM_90=('AUM', lambda x: np.percentile(x, 90)),
-        stocks_median=('stocks', 'median'),
-        stocks_90=('stocks', lambda x: np.percentile(x, 90)),
-        universe_median=('universe', 'median'),
-        universe_90=('universe', lambda x: np.percentile(x, 90)))
-
         by_type_quarter = managers_sub.groupby(['type', 'Qtr']).agg(
-                number=('id', 'nunique'),
-                AUM=('AUM', 'sum')
+            number=('id', 'nunique'),
+            AUM=('AUM', 'sum'),  
+            AUM_median=('AUM', 'median'),
+            AUM_90=('AUM', lambda x: np.percentile(x, 90)),
+            stocks_median=('stocks', 'median'),
+            stocks_90=('stocks', lambda x: np.percentile(x, 90)),
+            universe_median=('universe', 'median'),
+            universe_90=('universe', lambda x: np.percentile(x, 90))
             ).reset_index()
-        by_type_quarter = by_type_quarter.merge(market_sub, on='Qtr', how='left')
-        by_type_quarter['held'] = by_type_quarter['AUM']/by_type_quarter['market_val']*100
         
-        by_type['number'] = np.round(by_type_quarter.groupby('type')['number'].mean()).astype(int)
-        by_type['market_held'] = np.round(by_type_quarter.groupby('type')['held'].mean()).astype(int)
+        by_type_quarter = by_type_quarter.merge(market_sub, on='Qtr', how='left')
+        by_type_quarter['market_held'] = by_type_quarter['AUM']/by_type_quarter['market_val']*100
 
+        by_type = by_type_quarter.groupby('type').agg(
+            number=('number', 'mean'),
+            AUM_median=('AUM_median', 'mean'),
+            AUM_90=('AUM_90', 'mean'),
+            stocks_median=('stocks_median', 'mean'),
+            stocks_90=('stocks_90', 'mean'),
+            universe_median=('universe_median', 'mean'),
+            universe_90=('universe_90', 'mean'),
+            market_held=('market_held', 'mean')
+            ).reset_index()
+        
+        by_type['number'] = np.round(by_type['number']).astype(int)
+        by_type['market_held'] = np.round(by_type['market_held']).astype(int)
         by_type['AUM_median'] = np.round(by_type['AUM_median'] /1000000).astype(int)
         by_type['AUM_90'] = np.round(by_type['AUM_90'] /1000000).astype(int)
         by_type['stocks_median'] = np.round(by_type['stocks_median']).astype(int)
