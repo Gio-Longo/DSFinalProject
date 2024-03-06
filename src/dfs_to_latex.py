@@ -151,12 +151,12 @@ def df_to_latex_with_md_and_plots(df_old, df_new, plot_files, md_path, output):
     ]
 
     graph_captions = [
-        "We see that all fund types have an increase in their AUM compared to the beginning of the period. However, we see that the greatest increases to AUM occur for Mutual Funds and Investment Advisors.",
         "The average AUM held by each institution is mostly on an uptrend except for Banks. We see a drastic decrease in average AUM held by Banks during the 2008 crisis, which makes sense given the circumstances. ",
+        "We see that all fund types have an increase in their AUM compared to the beginning of the period. However, we see that the greatest increases to AUM occur for Mutual Funds and Investment Advisors.",
         "The number of unique managers varies drastically by institution type. We see a lot more managers involved with Banks to start, but this number decreases rapidly (similarly with Insurance). The other three investment types see the opposite trend, starting with less managers and increasing over time."
     ]
     
-    for i, plot_file, captions in enumerate(zip(plot_files,graph_captions)):
+    for i, (plot_file, captions) in enumerate(zip(plot_files,graph_captions)):
         full_latex += f"""\\section*{{{graph_headlines[i]}}}\n"""
         full_latex += r"\begin{figure}\n\centering\n"
         full_latex += f"""\\includegraphics[width=\\textwidth]{{{plot_file}}}\n\\newpage\n"""
